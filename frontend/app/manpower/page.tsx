@@ -1,8 +1,11 @@
+export const dynamic = 'force-dynamic';
 import React from 'react';
-import { MANPOWER_DATA } from '@/lib/data';
+import { getManpowerData } from "@/lib/api";
 import { Users, Flame, Layers, Factory, CheckCircle2, Activity } from 'lucide-react';
 
-export default function ManpowerPage() {
+export default async function ManpowerPage() {
+  const MANPOWER_DATA = await getManpowerData();
+  if (!MANPOWER_DATA) return <div className="p-8 text-center text-gray-500">Service temporarily unavailable.</div>;
   const { title, totalStrength, sitesCount, furnaceSites, mrpSites, sinterSites, keyObservations, conclusion } = MANPOWER_DATA;
 
   const totalFurnaceManpower = furnaceSites.reduce((acc, curr) => acc + curr.strength, 0);
@@ -122,3 +125,5 @@ export default function ManpowerPage() {
     </div>
   );
 }
+
+

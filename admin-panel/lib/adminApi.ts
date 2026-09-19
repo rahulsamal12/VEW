@@ -24,7 +24,13 @@ export async function loginAdmin(credentials: { username: string; password: stri
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials)
     });
-    const json = await res.json();
+    const text = await res.text();
+    let json;
+    try {
+      json = JSON.parse(text);
+    } catch(e) {
+      return { success: false, message: `Server error: ${res.status} ${res.statusText}` };
+    }
     if (json.success && json.token) {
       setToken(json.token);
     }
@@ -40,9 +46,15 @@ export async function fetchAdminData(endpoint: string) {
     const res = await fetch(`${API_BASE}${endpoint}`, {
       headers: {
         'Authorization': `Bearer ${token}`
-      }
+      },
+      cache: 'no-store'
     });
-    return await res.json();
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch(e) {
+      return { success: false, message: `Server error: ${res.status} ${res.statusText}` };
+    }
   } catch (error: any) {
     return { success: false, message: error?.message };
   }
@@ -51,15 +63,28 @@ export async function fetchAdminData(endpoint: string) {
 export async function updateAdminData(endpoint: string, data: any, method: 'POST' | 'PUT' | 'DELETE' = 'PUT') {
   const token = getToken();
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const options: RequestInit = {
       method,
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(data)
-    });
-    return await res.json();
+      }
+    };
+    
+    if (method !== 'DELETE') {
+      options.headers = {
+        ...options.headers,
+        'Content-Type': 'application/json'
+      };
+      options.body = JSON.stringify(data);
+    }
+
+    const res = await fetch(`${API_BASE}${endpoint}`, options);
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch(e) {
+      return { success: false, message: `Server error: ${res.status} ${res.statusText}` };
+    }
   } catch (error: any) {
     return { success: false, message: error?.message };
   }

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import React from 'react'; 
 import { SITE_IMAGES } from '@/lib/images';
 import Link from 'next/link';
@@ -323,3 +324,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+

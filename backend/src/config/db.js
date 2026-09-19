@@ -12,11 +12,7 @@ const connectDB = async () => {
     console.log(`MongoDB Connected successfully to DB: ${conn.connection.name}`);
   } catch (error) {
     global.isMongoConnected = false;
-    if (process.env.NODE_ENV === 'production') {
-      console.error(`PRODUCTION MONGODB CONNECTION ERROR: ${error.message}`);
-    } else {
-      console.warn(`Development MongoDB Warning: ${error.message}. Using development fallback dataset.`);
-    }
+    console.error(`MONGODB CONNECTION ERROR: ${error.message}`);
   }
 };
 

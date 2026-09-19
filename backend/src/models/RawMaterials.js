@@ -23,7 +23,7 @@ const RawMaterialSchema = new mongoose.Schema({
     dimensions: String,
     centerHeight: String,
     bothSidesHeight: String,
-    type: String
+    type: { type: String }
   },
   sourceRef: { type: String, default: 'Source: Operational SOP — Page 2' },
   updatedAt: { type: Date, default: Date.now }

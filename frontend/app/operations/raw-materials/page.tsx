@@ -1,9 +1,12 @@
+export const dynamic = 'force-dynamic';
 import React from "react"; 
 import { SITE_IMAGES } from '@/lib/images';
 import Image from "next/image";
-import { RAW_MATERIAL_DATA } from "@/lib/data";
+import { getRawMaterialsData } from "@/lib/api";
 import { Layers, CheckCircle2, ShieldAlert } from "lucide-react";
-export default function RawMaterialsSopPage() {
+export default async function RawMaterialsSopPage() {
+  const RAW_MATERIAL_DATA = await getRawMaterialsData();
+  if (!RAW_MATERIAL_DATA) return <div className="p-8 text-center text-gray-500">Service temporarily unavailable.</div>;
   const { operatingConditions, materials, note, excelNote, storageShed } =
     RAW_MATERIAL_DATA;
   return (
@@ -218,3 +221,5 @@ export default function RawMaterialsSopPage() {
     </div>
   );
 }
+
+

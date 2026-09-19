@@ -14,64 +14,140 @@ async function fetchFromApi<T>(endpoint: string, fallback: T): Promise<T> {
 }
 
 export async function getCompanyInfo() {
-  return fetchFromApi('/settings', staticData.COMPANY_INFO);
+  return fetchFromApi('/settings', null);
 }
 
 export async function getHomepageData() {
   return fetchFromApi('/homepage', {
-    heroHeading: staticData.COMPANY_INFO.tagline,
+    heroHeading: "",
     heroSubheading: "Furnace O&M, Metal Recovery Plants, Sinter Plants & Turnkey Projects",
-    companyIntro: staticData.COMPANY_INFO.description,
-    keyStatistics: staticData.KEY_STATISTICS
+    companyIntro: "",
+    keyStatistics: []
   });
 }
 
 export async function getServicesData() {
-  return fetchFromApi('/services', staticData.SERVICES_LIST);
+  return fetchFromApi('/services', []);
 }
 
 export async function getServiceBySlug(slug: string) {
-  return fetchFromApi(`/services/${slug}`, staticData.SERVICES_LIST.find(s => s.slug === slug) || staticData.SERVICES_LIST[0]);
+  return fetchFromApi(`/services/${slug}`, [].find(s => s.slug === slug) || [][0]);
 }
 
 export async function getClientsData() {
-  return fetchFromApi('/clients', staticData.MAJOR_CLIENTS);
+  return fetchFromApi('/clients', []);
 }
 
 export async function getFurnaceProjectsData() {
-  return fetchFromApi('/projects/furnace', staticData.FURNACE_PROJECTS);
+  return fetchFromApi('/projects/furnace', []);
 }
 
 export async function getMRPProjectsData() {
-  return fetchFromApi('/projects/mrp', staticData.MRP_PROJECTS);
+  return fetchFromApi('/projects/mrp', []);
 }
 
 export async function getSinterProjectsData() {
-  return fetchFromApi('/projects/sinter', staticData.SINTER_PROJECTS);
+  return fetchFromApi('/projects/sinter', []);
 }
 
 export async function getInternationalProjectsData() {
-  return fetchFromApi('/projects/international', staticData.INTERNATIONAL_PROJECTS);
+  return fetchFromApi('/projects/international', []);
 }
 
 export async function getInnovationData() {
-  return fetchFromApi('/innovation', staticData.INNOVATION_DATA);
+  const data: any = await fetchFromApi('/innovation', null);
+  if (data && data.innovationElements) {
+    return {
+      title: data.title,
+      subject: data.subject,
+      elements: data.innovationElements,
+      result: data.result,
+      tslNorms: {
+        client: data.tslNormsRevision?.client || '',
+        previous: data.tslNormsRevision?.previousNorm || '',
+        revised: data.tslNormsRevision?.revisedNorm || '',
+        context: data.tslNormsRevision?.context || ''
+      },
+      impacts: data.impacts
+    };
+  }
+  return data;
 }
 
 export async function getRawMaterialsData() {
-  return fetchFromApi('/raw-materials', staticData.RAW_MATERIAL_DATA);
+  const data: any = await fetchFromApi('/raw-materials', null);
+  if (data && data.storageShedRequirement) {
+    return {
+      operatingConditions: {
+        load: data.operatingConditions?.load,
+        pf: data.operatingConditions?.pf,
+        lf: data.operatingConditions?.lf,
+        specificPower: data.operatingConditions?.specificPower,
+        productionPerDay: data.operatingConditions?.productionPerDayPerFurnace,
+        totalProduction: data.operatingConditions?.totalProduction
+      },
+      materials: data.materials?.map((m: any) => ({
+        material: m.material,
+        consumption: m.consumptionPerMT,
+        monthly: m.monthlyRequirement,
+        size: m.size,
+        specs: m.specifications
+      })) || [],
+      note: data.note,
+      excelNote: data.sourceExcelNote,
+      storageShed: {
+        description: data.storageShedRequirement?.description,
+        dimensions: data.storageShedRequirement?.dimensions,
+        height: data.storageShedRequirement?.centerHeight,
+        bothSides: data.storageShedRequirement?.bothSidesHeight,
+        type: data.storageShedRequirement?.type
+      }
+    };
+  }
+  return data;
 }
 
 export async function getOperationalSopData() {
-  return fetchFromApi('/operations', staticData.OPERATIONAL_SOP_DATA);
+  const data: any = await fetchFromApi('/operations', null);
+  if (data && data.scopeDetails) {
+    return {
+      ...data,
+      activities: data.scopeDetails
+    };
+  }
+  return data;
 }
 
 export async function getKpiData() {
-  return fetchFromApi('/kpis', staticData.KPI_DATA);
+  const data: any = await fetchFromApi('/kpis', null);
+  if (data && data.dayPowerProductionCalculation) {
+    return {
+      title: data.title,
+      powerCalculation: data.dayPowerProductionCalculation?.formulaPower,
+      productionCalculation: data.dayPowerProductionCalculation?.formulaProduction,
+      grade65: {
+        name: data.grades?.[0]?.gradeName,
+        ratio: data.grades?.[0]?.mnFeRatio,
+        carbonInput: data.grades?.[0]?.carbonInput,
+        mnInput: data.grades?.[0]?.avgMnInput,
+        basicity: data.grades?.[0]?.basicity,
+        mno: data.grades?.[0]?.mnO
+      },
+      grade60: {
+        name: data.grades?.[1]?.gradeName,
+        ratio: data.grades?.[1]?.mnFeRatio,
+        carbonInput: data.grades?.[1]?.carbonInput,
+        mnInput: data.grades?.[1]?.avgMnInput,
+        basicity: data.grades?.[1]?.basicity,
+        mno: data.grades?.[1]?.mnO
+      }
+    };
+  }
+  return data;
 }
 
 export async function getManpowerData() {
-  return fetchFromApi('/manpower', staticData.MANPOWER_DATA);
+  return fetchFromApi('/manpower', null);
 }
 
 export async function sendEnquiry(data: { name: string; company: string; email: string; phone: string; subject: string; message: string }) {
@@ -86,3 +162,4 @@ export async function sendEnquiry(data: { name: string; company: string; email: 
     return { success: false, message: error?.message || 'Failed to connect to backend server' };
   }
 }
+

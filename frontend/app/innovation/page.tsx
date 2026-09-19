@@ -1,11 +1,14 @@
+export const dynamic = 'force-dynamic';
 import React from 'react'; 
 import { SITE_IMAGES } from '@/lib/images';
 import Image from 'next/image';
 import Link from 'next/link';
-import { INNOVATION_DATA } from '@/lib/data';
+import { getInnovationData } from "@/lib/api";
 import { Settings2, ArrowDown, ArrowRight, CornerDownRight, TrendingUp } from 'lucide-react';
 
-export default function InnovationPage() {
+export default async function InnovationPage() {
+  const INNOVATION_DATA = await getInnovationData();
+  if (!INNOVATION_DATA) return <div className="p-8 text-center text-gray-500">Service temporarily unavailable.</div>;
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20 transition-colors duration-200">
       
@@ -220,3 +223,5 @@ export default function InnovationPage() {
     </div>
   );
 }
+
+

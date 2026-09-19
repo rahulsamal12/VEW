@@ -27,3 +27,18 @@ Thumbs.db
 .temp/
 .tmp/
 .cache/
+
+# Local MongoDB and temp files
+data/
+mongodb/
+mongodb.zip
+mongodb.msi
+.next/
+node_modules/
+.env
+.env.*
+backend/test_mongoose.js
+fix_dynamic.js
+fix_frontend_pages.js
+test_e2e.js
+query

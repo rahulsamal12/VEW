@@ -2,9 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Flame, ArrowRight } from 'lucide-react';
-import { FURNACE_PROJECTS } from '@/lib/data';
+import { getFurnaceProjectsData } from '@/lib/api';
 
-export default function FurnaceOMServicePage() {
+export default async function FurnaceOMServicePage() {
+  const FURNACE_PROJECTS = await getFurnaceProjectsData();
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16 transition-colors duration-200">
       

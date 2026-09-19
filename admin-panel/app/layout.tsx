@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeContext";
 import AdminLayout from "@/components/AdminLayout";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
 export const metadata: Metadata = {
   title: "Venkateswar Engg Works Pvt. Ltd. | Enterprise Admin Portal",
   description:
     "Enterprise Content Management Console for Venkateswar Engg Works Pvt. Ltd.",
 };
+
 export default function RootLayout({
   children,
 }: {
@@ -21,7 +26,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[var(--admin-bg)] text-[var(--admin-text-primary)] antialiased transition-colors duration-200">
+      <body className={`${inter.variable} font-sans min-h-screen bg-[var(--admin-bg)] text-[var(--admin-text-primary)] antialiased transition-colors duration-200`}>
         <ThemeProvider> 
           <AdminLayout>
             {children} 
@@ -31,3 +36,4 @@ export default function RootLayout({
     </html>
   );
 }
+

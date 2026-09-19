@@ -3,9 +3,10 @@ import Image from "next/image";
 import { SITE_IMAGES } from "@/lib/images";
 import Link from "next/link";
 import { Factory, ArrowRight } from "lucide-react";
-import { SINTER_PROJECTS } from "@/lib/data";
+import { getSinterProjectsData } from "@/lib/api";
 
-export default function SinterPlantsServicePage() {
+export default async function SinterPlantsServicePage() {
+  const SINTER_PROJECTS = await getSinterProjectsData();
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16 transition-colors duration-200">
       

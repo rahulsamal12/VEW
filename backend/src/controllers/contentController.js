@@ -20,37 +20,29 @@ const Manpower = require('../models/Manpower');
 // Helper to get single document
 const getSingleDoc = async (Model, fallbackKey, res) => {
   try {
+    if (!global.isMongoConnected) {
+      return res.status(503).json({ success: false, message: 'Database service unavailable' });
+    }
     const doc = await Model.findOne();
     if (doc) return res.json({ success: true, data: doc });
+    return res.status(404).json({ success: false, message: 'Content not found' });
   } catch (err) {
-    if (process.env.NODE_ENV === 'production') {
-      return res.status(500).json({ success: false, message: 'Database query error', error: err.message });
-    }
+    return res.status(500).json({ success: false, message: 'Database query error', error: err.message });
   }
-  
-  if (process.env.NODE_ENV === 'production' && !global.isMongoConnected) {
-    return res.status(503).json({ success: false, message: 'Database service unavailable' });
-  }
-
-  return res.json({ success: true, data: seedData[fallbackKey] });
 };
 
 // Helper to get list documents
 const getListDocs = async (Model, fallbackKey, res, sortKey = 'order') => {
   try {
+    if (!global.isMongoConnected) {
+      return res.status(503).json({ success: false, message: 'Database service unavailable' });
+    }
     const docs = await Model.find().sort({ [sortKey]: 1 });
     if (docs && docs.length > 0) return res.json({ success: true, data: docs });
+    return res.json({ success: true, data: [] });
   } catch (err) {
-    if (process.env.NODE_ENV === 'production') {
-      return res.status(500).json({ success: false, message: 'Database query error', error: err.message });
-    }
+    return res.status(500).json({ success: false, message: 'Database query error', error: err.message });
   }
-
-  if (process.env.NODE_ENV === 'production' && !global.isMongoConnected) {
-    return res.status(503).json({ success: false, message: 'Database service unavailable' });
-  }
-
-  return res.json({ success: true, data: seedData[fallbackKey] });
 };
 
 // Public GET Endpoints
@@ -62,13 +54,15 @@ const getServices = (req, res) => getListDocs(Service, 'services', res);
 
 const getServiceBySlug = async (req, res) => {
   try {
+    if (!global.isMongoConnected) {
+      return res.status(503).json({ success: false, message: 'Database service unavailable' });
+    }
     const service = await Service.findOne({ slug: req.params.slug });
     if (service) return res.json({ success: true, data: service });
-  } catch (e) {}
-
-  const fallback = seedData.services.find(s => s.slug === req.params.slug);
-  if (fallback) return res.json({ success: true, data: fallback });
-  res.status(404).json({ success: false, message: 'Service not found' });
+    return res.status(404).json({ success: false, message: 'Service not found' });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Database query error', error: err.message });
+  }
 };
 
 const getClients = (req, res) => getListDocs(Client, 'clients', res);
@@ -86,6 +80,7 @@ const getManpower = (req, res) => getSingleDoc(Manpower, 'manpower', res);
 
 // Admin Generic Single Doc Update
 const updateSingleDoc = (Model) => async (req, res) => {
+  if (!global.isMongoConnected) return res.status(503).json({ success: false, message: 'Database service unavailable' });
   try {
     let doc = await Model.findOne();
     if (!doc) {
@@ -102,6 +97,7 @@ const updateSingleDoc = (Model) => async (req, res) => {
 
 // Admin Generic List CRUD
 const createListDoc = (Model) => async (req, res) => {
+  if (!global.isMongoConnected) return res.status(503).json({ success: false, message: 'Database service unavailable' });
   try {
     const doc = new Model(req.body);
     await doc.save();
@@ -112,6 +108,7 @@ const createListDoc = (Model) => async (req, res) => {
 };
 
 const updateListDoc = (Model) => async (req, res) => {
+  if (!global.isMongoConnected) return res.status(503).json({ success: false, message: 'Database service unavailable' });
   try {
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!doc) return res.status(404).json({ success: false, message: 'Item not found' });
@@ -122,6 +119,7 @@ const updateListDoc = (Model) => async (req, res) => {
 };
 
 const deleteListDoc = (Model) => async (req, res) => {
+  if (!global.isMongoConnected) return res.status(503).json({ success: false, message: 'Database service unavailable' });
   try {
     const doc = await Model.findByIdAndDelete(req.params.id);
     if (!doc) return res.status(404).json({ success: false, message: 'Item not found' });

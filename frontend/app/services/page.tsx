@@ -2,10 +2,11 @@ import React from 'react';
 import { SITE_IMAGES } from '@/lib/images';
 import Link from 'next/link';
 import Image from 'next/image';
-import { SERVICES_LIST } from '@/lib/data';
+import { getServicesData } from "@/lib/api";
 import { Factory, ArrowRight } from 'lucide-react';
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const SERVICES_LIST = await getServicesData();
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8 transition-colors duration-200">
       {/* Header */}

@@ -1,5 +1,107 @@
 import React from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Phone, Mail, ExternalLink } from 'lucide-react';
-import { COMPANY_INFO } from '@/lib/data'; export default function Footer() { return ( <footer className="bg-[var(--bg-secondary)] border-t border-[var(--border-color)] text-[var(--text-secondary)] text-sm transition-colors duration-200"> <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14"> <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"> {/* Col 1: Brand & About */} <div className="space-y-4"> <div className="flex items-center gap-3"> <div className="w-10 h-10 bg-[var(--accent-steel)] text-[var(--bg-surface)] font-bold text-[16px] flex items-center justify-center border border-[var(--accent-brass)]"> V </div> <span className="text-[15px] font-[650] text-[var(--text-primary)] tracking-tight"> Venkateswar Engg Works </span> </div> <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed"> Multi-disciplinary engineering firm with deep operational expertise in Ferro Alloys & Metallurgical Engineering across India and globally. </p> <div className="pt-2 text-xs space-y-1"> <div className="flex items-center gap-2 text-[var(--accent-brass)] font-semibold"> <ShieldCheck className="w-4 h-4 text-[var(--accent-steel)] dark:text-[var(--accent-brass)]" /> GSTIN: {COMPANY_INFO.gstin} </div> <p className="text-[var(--text-muted)]">Founded: {COMPANY_INFO.founded} by {COMPANY_INFO.founder}</p> </div> </div> {/* Col 2: Core Capabilities */} <div> <h4 className="text-[var(--text-primary)] font-semibold text-[13px] uppercase tracking-wider mb-4 border-l-2 border-[var(--accent-brass)] pl-3"> Core Capabilities </h4> <ul className="space-y-2 text-[13px]"> <li><Link href="/services/furnace-om" className="hover:text-[var(--accent-brass)] transition-colors">Furnace O&M (5-24 MVA)</Link></li> <li><Link href="/services/mrp" className="hover:text-[var(--accent-brass)] transition-colors">Metal Recovery Plants (50-1500 TPD)</Link></li> <li><Link href="/services/sinter-plants" className="hover:text-[var(--accent-brass)] transition-colors">Sinter Plants (40-200 TPD)</Link></li> <li><Link href="/services/boot-boo" className="hover:text-[var(--accent-brass)] transition-colors">BOOT / BOO Models (Up to 19 Yrs)</Link></li> <li><Link href="/services/turnkey-projects" className="hover:text-[var(--accent-brass)] transition-colors">Turnkey EPC Execution</Link></li> <li><Link href="/services/beneficiary-units" className="hover:text-[var(--accent-brass)] transition-colors">Beneficiary Ore Upgrade</Link></li> <li><Link href="/services/fabrication-erection" className="hover:text-[var(--accent-brass)] transition-colors">Fabrication & Erection</Link></li> </ul> </div> {/* Col 3: Operations & Projects */} <div> <h4 className="text-[var(--text-primary)] font-semibold text-[13px] uppercase tracking-wider mb-4 border-l-2 border-[var(--accent-brass)] pl-3"> Operations & Projects </h4> <ul className="space-y-2 text-[13px]"> <li><Link href="/projects/furnace" className="hover:text-[var(--accent-brass)] transition-colors">Furnace O&M Projects</Link></li> <li><Link href="/projects/mrp" className="hover:text-[var(--accent-brass)] transition-colors">MRP Project Portfolio</Link></li> <li><Link href="/projects/sinter" className="hover:text-[var(--accent-brass)] transition-colors">Sinter Turnkey Projects</Link></li> <li><Link href="/projects/international" className="hover:text-[var(--accent-brass)] transition-colors">International Projects (Oman & Zambia)</Link></li> <li><Link href="/operations/raw-materials" className="hover:text-[var(--accent-brass)] transition-colors">NGM Smelters Raw Material SOP</Link></li> <li><Link href="/innovation" className="hover:text-[var(--accent-brass)] transition-colors">Diaphragm Jig Micro Fines Innovation</Link></li> <li><Link href="/kpi" className="hover:text-[var(--accent-brass)] transition-colors">KPI Technical Specifications</Link></li> <li><Link href="/manpower" className="hover:text-[var(--accent-brass)] transition-colors">Manpower Distribution (~3,100)</Link></li> </ul> </div> {/* Col 4: Leadership Contact */} <div> <h4 className="text-[var(--text-primary)] font-semibold text-[13px] uppercase tracking-wider mb-4 border-l-2 border-[var(--accent-brass)] pl-3"> Leadership & Contact </h4> <div className="space-y-3 text-[13px]"> {COMPANY_INFO.contacts.map((c, i) => ( <div key={i} className="p-3 bg-[var(--bg-surface)] border border-[var(--border-color)] space-y-1"> <p className="font-semibold text-[var(--text-primary)]">{c.name}</p> <p className="text-[var(--accent-brass)] text-[12px] font-medium">{c.title}</p> <div className="flex items-center gap-1.5 text-[var(--text-secondary)] pt-1"> <Phone className="w-3 h-3 text-[var(--accent-steel)] dark:text-[var(--accent-brass)]" /> <a href={`tel:${c.phone}`} className="hover:text-[var(--accent-brass)]">{c.phone}</a> </div> <div className="flex items-center gap-1.5 text-[var(--text-secondary)]"> <Mail className="w-3 h-3 text-[var(--accent-steel)] dark:text-[var(--accent-brass)]" /> <a href={`mailto:${c.email}`} className="hover:text-[var(--accent-brass)]">{c.email}</a> </div> </div> ))} </div> </div> </div> {/* Bottom Bar */} <div className="mt-12 pt-6 border-t border-[var(--border-color)] flex flex-col md:flex-row justify-between items-center text-[12px] text-[var(--text-muted)] gap-4"> <p>© {new Date().getFullYear()} Venkateswar Engg Works Pvt. Ltd. All Rights Reserved.</p> <div className="flex items-center gap-6"> <span>ISO Certified Operations</span> <Link href="http://localhost:3001" target="_blank" className="text-[var(--accent-brass)] hover:underline flex items-center gap-1 font-medium"> Admin Portal <ExternalLink className="w-3 h-3" /> </Link> </div> </div> </div> </footer> );
+import { COMPANY_INFO } from '@/lib/data';
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#243746] dark:bg-[#15191C] text-[#C5CDD1] font-sans border-t border-[rgba(255,255,255,0.05)] transition-colors duration-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          
+          {/* Col 1: Brand & About */}
+          <div className="space-y-6">
+            <div className="flex flex-col gap-2">
+              <span className="text-[20px] md:text-[22px] font-bold text-[#F5F5F2] tracking-tight leading-tight">
+                Venkateswar Engg<br />Works Pvt. Ltd.
+              </span>
+            </div>
+            
+            <p className="text-[14px] md:text-[15px] text-[#C5CDD1] font-normal leading-relaxed max-w-sm">
+              Multi-disciplinary engineering firm with deep operational expertise in Ferro Alloys & Metallurgical Engineering across India and globally.
+            </p>
+            
+            <div className="text-[13px] space-y-2 pt-2">
+              <div className="flex items-center gap-2 text-[#C19A45] font-semibold">
+                <ShieldCheck className="w-4 h-4" />
+                <span className="text-[#F2F3F1]">GSTIN:</span> <span className="text-[#C5CDD1]">{COMPANY_INFO.gstin}</span>
+              </div>
+              <p className="text-[#AEB8BD]">Founded: {COMPANY_INFO.founded} by {COMPANY_INFO.founder}</p>
+            </div>
+          </div>
+
+          {/* Col 2: Core Capabilities */}
+          <div>
+            <h4 className="text-[#F2F3F1] font-semibold text-[13px] md:text-[14px] tracking-wide mb-6 uppercase">
+              Core Capabilities
+            </h4>
+            <ul className="space-y-3 text-[14px] md:text-[15px] font-normal">
+              <li><Link href="/services/furnace-om" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Furnace O&M (5-24 MVA)</Link></li>
+              <li><Link href="/services/mrp" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Metal Recovery Plants (50-1500 TPD)</Link></li>
+              <li><Link href="/services/sinter-plants" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Sinter Plants (40-200 TPD)</Link></li>
+              <li><Link href="/services/boot-boo" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">BOOT / BOO Models (Up to 19 Yrs)</Link></li>
+              <li><Link href="/services/turnkey-projects" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Turnkey EPC Execution</Link></li>
+              <li><Link href="/services/beneficiary-units" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Beneficiary Ore Upgrade</Link></li>
+              <li><Link href="/services/fabrication-erection" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Fabrication & Erection</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 3: Operations & Projects */}
+          <div>
+            <h4 className="text-[#F2F3F1] font-semibold text-[13px] md:text-[14px] tracking-wide mb-6 uppercase">
+              Operations & Projects
+            </h4>
+            <ul className="space-y-3 text-[14px] md:text-[15px] font-normal">
+              <li><Link href="/projects/furnace" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Furnace O&M Projects</Link></li>
+              <li><Link href="/projects/mrp" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">MRP Project Portfolio</Link></li>
+              <li><Link href="/projects/sinter" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Sinter Turnkey Projects</Link></li>
+              <li><Link href="/projects/international" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">International Projects (Oman & Zambia)</Link></li>
+              <li><Link href="/operations/raw-materials" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">NGM Smelters Raw Material SOP</Link></li>
+              <li><Link href="/innovation" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Diaphragm Jig Micro Fines Innovation</Link></li>
+              <li><Link href="/kpi" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">KPI Technical Specifications</Link></li>
+              <li><Link href="/manpower" className="text-[#C5CDD1] hover:text-[#D4AF37] transition-colors duration-200">Manpower Distribution (~3,100)</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 4: Leadership Contact */}
+          <div>
+            <h4 className="text-[#F2F3F1] font-semibold text-[13px] md:text-[14px] tracking-wide mb-6 uppercase">
+              Leadership & Contact
+            </h4>
+            <div className="space-y-6">
+              {COMPANY_INFO.contacts.map((c, i) => (
+                <div key={i} className="space-y-1.5">
+                  <p className="font-semibold text-[#F2F3F1] text-[15px]">{c.name}</p>
+                  <p className="text-[#C19A45] text-[13px] font-medium tracking-wide uppercase">{c.title}</p>
+                  <div className="pt-1 space-y-2 text-[14px] md:text-[15px]">
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-[#AEB8BD]" />
+                      <a href={`tel:${c.phone}`} className="text-[#D0D6D9] hover:text-[#C19A45] transition-colors duration-200 font-medium">{c.phone}</a>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-[#AEB8BD]" />
+                      <a href={`mailto:${c.email}`} className="text-[#D0D6D9] hover:text-[#C19A45] transition-colors duration-200 font-medium">{c.email}</a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-16 pt-8 border-t border-[rgba(255,255,255,0.14)] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4">
+          <p className="text-[#AEB8BD] text-[13px] md:text-[14px] font-normal text-center md:text-left">
+            © {new Date().getFullYear()} Venkateswar Engg Works Pvt. Ltd. All Rights Reserved.
+          </p>
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 text-[13px] md:text-[14px] font-normal">
+            <span className="text-[#BFC7CB]">ISO Certified Operations</span>
+            <Link href="http://localhost:3001" target="_blank" className="text-[#BFC7CB] hover:text-[#C19A45] flex items-center gap-1.5 transition-colors duration-200">
+              Admin Portal <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }

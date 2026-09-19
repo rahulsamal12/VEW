@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchAdminData, updateAdminData } from "@/lib/adminApi";
-import { Layers, Plus, Trash2, Edit2 } from "lucide-react";
+import { Layers, Plus, Trash2, Edit2 , AlertCircle, RefreshCw} from "lucide-react";
 interface MRPItem {
   _id?: string;
   client: string;
@@ -47,8 +47,12 @@ export default function MRPProjectsAdminPage() {
   };
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this MRP Project?")) {
-      await updateAdminData(`/admin/projects/mrp/${id}`, {}, "DELETE");
-      loadData();
+      const res = await updateAdminData(`/admin/projects/mrp/${id}`, {}, "DELETE");
+      if (res && res.success) {
+        loadData();
+      } else {
+        alert(res?.message || "Failed to delete");
+      }
     }
   };
   const openNew = () => {
@@ -69,94 +73,90 @@ export default function MRPProjectsAdminPage() {
     setIsModalOpen(true);
   };
   return (
-    <div className="space-y-6 text-xs">
-      {" "}
-      <div className="flex justify-between items-center border-b border-gray-800 pb-4">
-        {" "}
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-admin-border pb-4">
         <div>
-          {" "}
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
+          <h1 className="text-[24px] font-bold text-admin-text-primary tracking-tight">
             MRP Projects Manager
-          </h1>{" "}
-          <p className="text-[var(--text-muted)]">
+          </h1>
+          <p className="text-[13px] text-admin-text-secondary mt-1">
             Manage Metal Recovery Plant projects list.
-          </p>{" "}
-        </div>{" "}
+          </p>
+        </div>
         <button
           onClick={openNew}
-          className="px-4 py-2 rounded-sm bg-cyan-500 text-[var(--text-primary)] font-bold flex items-center gap-1.5"
+          className="btn-primary gap-1.5"
         >
-          {" "}
-          <Plus className="w-4 h-4" /> Add New MRP Project{" "}
-        </button>{" "}
-      </div>{" "}
-      <div className="bg-[#111827] rounded-sm border border-gray-800 overflow-hidden">
-        {" "}
-        <table className="w-full text-left text-[var(--text-secondary)]">
-          {" "}
-          <thead className="bg-[var(--bg-surface)] text-[var(--text-muted)] uppercase font-semibold border-b border-gray-800">
-            {" "}
+          <Plus className="w-4 h-4" /> Add New MRP Project
+        </button>
+      </div>
+      
+      <div className="admin-table-container rounded-sm">
+        <table className="admin-table">
+          <thead>
             <tr>
-              {" "}
-              <th className="p-3">Client</th> <th className="p-3">Scope</th>{" "}
-              <th className="p-3">Type</th> <th className="p-3">Period</th>{" "}
-              <th className="p-3">Process</th> <th className="p-3">Remarks</th>{" "}
-              <th className="p-3 text-right">Actions</th>{" "}
-            </tr>{" "}
-          </thead>{" "}
-          <tbody className="divide-y divide-[var(--border-color)]">
-            {" "}
+              <th>Client</th>
+              <th>Scope</th>
+              <th>Type</th>
+              <th>Period</th>
+              <th>Process</th>
+              <th>Remarks</th>
+              <th className="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {items.map((row, idx) => (
-              <tr key={idx} className="hover:bg-gray-800/40">
-                {" "}
-                <td className="p-3 font-bold text-[var(--text-primary)]">
-                  {row.client}
-                </td>{" "}
-                <td className="p-3 text-[var(--accent-brass)]">{row.scope}</td>{" "}
-                <td className="p-3 text-amber-400 font-semibold">{row.type}</td>{" "}
-                <td className="p-3">{row.period}</td>{" "}
-                <td className="p-3">{row.process}</td>{" "}
-                <td className="p-3 text-[var(--text-muted)]">{row.remarks}</td>{" "}
-                <td className="p-3 text-right space-x-2">
-                  {" "}
+              <tr key={idx}>
+                <td className="font-bold">{row.client}</td>
+                <td className="text-admin-steel dark:text-admin-brass font-semibold">{row.scope}</td>
+                <td>{row.type}</td>
+                <td>{row.period}</td>
+                <td>{row.process}</td>
+                <td className="text-admin-text-muted">{row.remarks}</td>
+                <td className="text-right space-x-2">
                   <button
                     onClick={() => openEdit(row)}
-                    className="p-1 text-[var(--text-muted)] hover:text-[var(--accent-brass)]"
+                    className="p-1.5 text-admin-text-muted hover:text-admin-steel dark:hover:text-admin-brass transition-colors"
+                    title="Edit Project"
                   >
                     <Edit2 className="w-4 h-4" />
-                  </button>{" "}
+                  </button>
                   {row._id && (
                     <button
                       onClick={() => handleDelete(row._id!)}
-                      className="p-1 text-[var(--text-muted)] hover:text-rose-500"
+                      className="p-1.5 text-admin-text-muted hover:text-rose-600 transition-colors"
+                      title="Delete Project"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                  )}{" "}
-                </td>{" "}
+                  )}
+                </td>
               </tr>
-            ))}{" "}
-          </tbody>{" "}
-        </table>{" "}
-      </div>{" "}
+            ))}
+            {items.length === 0 && (
+              <tr>
+                <td colSpan={7} className="text-center py-8 text-admin-text-muted">
+                  No projects found. Add a new project to get started.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          {" "}
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <form
             onSubmit={handleSave}
-            className="bg-[#111827] border border-gray-800 p-6 rounded-md max-w-md w-full space-y-4"
+            className="bg-admin-surface border border-admin-border p-6 sm:p-8 rounded-sm max-w-lg w-full space-y-6 shadow-xl"
           >
-            {" "}
-            <h2 className="text-lg font-bold text-[var(--text-primary)]">
+            <h2 className="text-[18px] font-bold text-admin-text-primary border-b border-admin-border pb-3">
               {editingItem ? "Edit MRP Project" : "Add New MRP Project"}
-            </h2>{" "}
-            <div className="space-y-3">
-              {" "}
+            </h2>
+            
+            <div className="space-y-4">
               <div>
-                {" "}
-                <label className="block text-[var(--text-muted)] mb-1">
-                  Client Name *
-                </label>{" "}
+                <label className="form-label">Client Name *</label>
                 <input
                   type="text"
                   required
@@ -164,106 +164,100 @@ export default function MRPProjectsAdminPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, client: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)]"
-                />{" "}
-              </div>{" "}
+                  className="form-input"
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="form-label">Scope *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.scope}
+                    onChange={(e) =>
+                      setFormData({ ...formData, scope: e.target.value })
+                    }
+                    placeholder="e.g. 3 x 200 TPD"
+                    className="form-input"
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Type *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.type}
+                    onChange={(e) =>
+                      setFormData({ ...formData, type: e.target.value })
+                    }
+                    className="form-input"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="form-label">Period *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.period}
+                    onChange={(e) =>
+                      setFormData({ ...formData, period: e.target.value })
+                    }
+                    placeholder="e.g. 2012 – Till date"
+                    className="form-input"
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Process *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.process}
+                    onChange={(e) =>
+                      setFormData({ ...formData, process: e.target.value })
+                    }
+                    placeholder="e.g. Fe Cr"
+                    className="form-input"
+                  />
+                </div>
+              </div>
+              
               <div>
-                {" "}
-                <label className="block text-[var(--text-muted)] mb-1">
-                  Scope *
-                </label>{" "}
-                <input
-                  type="text"
-                  required
-                  value={formData.scope}
-                  onChange={(e) =>
-                    setFormData({ ...formData, scope: e.target.value })
-                  }
-                  placeholder="e.g. 3 x 200 TPD"
-                  className="w-full px-3 py-2 rounded bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)]"
-                />{" "}
-              </div>{" "}
-              <div>
-                {" "}
-                <label className="block text-[var(--text-muted)] mb-1">
-                  Type *
-                </label>{" "}
-                <input
-                  type="text"
-                  required
-                  value={formData.type}
-                  onChange={(e) =>
-                    setFormData({ ...formData, type: e.target.value })
-                  }
-                  className="w-full px-3 py-2 rounded bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)]"
-                />{" "}
-              </div>{" "}
-              <div>
-                {" "}
-                <label className="block text-[var(--text-muted)] mb-1">
-                  Period *
-                </label>{" "}
-                <input
-                  type="text"
-                  required
-                  value={formData.period}
-                  onChange={(e) =>
-                    setFormData({ ...formData, period: e.target.value })
-                  }
-                  placeholder="e.g. 2012 – Till date"
-                  className="w-full px-3 py-2 rounded bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)]"
-                />{" "}
-              </div>{" "}
-              <div>
-                {" "}
-                <label className="block text-[var(--text-muted)] mb-1">
-                  Process *
-                </label>{" "}
-                <input
-                  type="text"
-                  required
-                  value={formData.process}
-                  onChange={(e) =>
-                    setFormData({ ...formData, process: e.target.value })
-                  }
-                  placeholder="e.g. Fe Cr"
-                  className="w-full px-3 py-2 rounded bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)]"
-                />{" "}
-              </div>{" "}
-              <div>
-                {" "}
-                <label className="block text-[var(--text-muted)] mb-1">
-                  Remarks
-                </label>{" "}
+                <label className="form-label">Remarks</label>
                 <input
                   type="text"
                   value={formData.remarks}
                   onChange={(e) =>
                     setFormData({ ...formData, remarks: e.target.value })
                   }
-                  className="w-full px-3 py-2 rounded bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)]"
-                />{" "}
-              </div>{" "}
-            </div>{" "}
-            <div className="flex gap-3 pt-2">
-              {" "}
+                  className="form-input"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 pt-4 border-t border-admin-border">
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 py-2 rounded bg-gray-800 text-[var(--text-secondary)]"
+                className="btn-secondary flex-1"
               >
                 Cancel
-              </button>{" "}
+              </button>
               <button
                 type="submit"
-                className="flex-1 py-2 rounded bg-cyan-500 text-[var(--text-primary)] font-bold"
+                className="btn-primary flex-1"
               >
                 Save Project
-              </button>{" "}
-            </div>{" "}
-          </form>{" "}
+              </button>
+            </div>
+          </form>
         </div>
-      )}{" "}
+      )}
     </div>
   );
 }
+
+

@@ -12,16 +12,19 @@ module.exports = {
           bg: 'var(--admin-bg)',
           sidebar: 'var(--admin-sidebar)',
           surface: 'var(--admin-surface)',
-          elevated: 'var(--admin-elevated)',
+          card: 'var(--admin-card)',
           border: 'var(--admin-border)',
-          accent: 'var(--admin-accent)',
+          steel: 'var(--admin-steel)',
           brass: 'var(--admin-brass)',
-          stripe: 'var(--admin-stripe)',
           text: {
             primary: 'var(--admin-text-primary)',
-            secondary: 'var(--admin-text-secondary)'
+            secondary: 'var(--admin-text-secondary)',
+            muted: 'var(--admin-text-muted)'
           }
         }
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       }
     },
   },

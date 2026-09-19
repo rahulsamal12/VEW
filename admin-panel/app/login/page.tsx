@@ -22,82 +22,78 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--admin-bg)] transition-colors duration-200">
-      {" "}
-      <div className="w-full max-w-md bg-[var(--admin-surface)] border border-[var(--admin-border)] rounded-md p-8 space-y-6 shadow-sm">
-        {" "}
-        <div className="text-center space-y-2">
-          {" "}
-          <div className="w-12 h-12 rounded-sm bg-[var(--admin-accent)] border border-[var(--admin-brass)] flex items-center justify-center font-bold text-xl text-[#FFFFFF] mx-auto shadow-sm">
-            {" "}
-            V{" "}
-          </div>{" "}
-          <h1 className="text-2xl font-[650] text-[var(--admin-text-primary)] tracking-tight">
-            Administrator Login
-          </h1>{" "}
-          <p className="text-xs text-[var(--admin-text-secondary)]">
-            Venkateswar Engg Works Pvt. Ltd.
-          </p>{" "}
-        </div>{" "}
-        {error && (
-          <div className="p-3.5 rounded-sm bg-red-950/80 border border-red-800 text-red-300 text-xs flex items-center gap-2">
-            {" "}
-            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />{" "}
-            <span>{error}</span>{" "}
+    <div className="min-h-screen flex items-center justify-center p-4 bg-admin-bg transition-colors duration-200">
+      <div className="w-full max-w-[400px] bg-admin-surface border border-admin-border rounded-sm p-8 sm:p-10 shadow-sm space-y-8">
+        <div className="text-center space-y-3">
+          <div className="w-12 h-12 rounded-sm bg-admin-steel text-white flex items-center justify-center font-bold text-xl mx-auto shadow-sm">
+            V
           </div>
-        )}{" "}
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          {" "}
           <div>
-            {" "}
-            <label className="block text-[var(--admin-text-secondary)] mb-1 font-medium">
+            <h1 className="text-[24px] font-[600] text-admin-text-primary tracking-tight">
+              Administrator Login
+            </h1>
+            <p className="text-[13px] text-admin-text-secondary mt-1">
+              Venkateswar Engg Works Pvt. Ltd.
+            </p>
+          </div>
+        </div>
+        
+        {error && (
+          <div className="p-4 rounded-sm bg-rose-600/10 border border-rose-600/30 text-rose-600 text-[13px] flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+        
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="form-label">
               Username
-            </label>{" "}
+            </label>
             <div className="relative">
-              {" "}
-              <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--admin-text-secondary)]" />{" "}
+              <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-admin-text-muted" />
               <input
                 type="text"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin"
-                className="w-full pl-9 pr-3 py-2.5 rounded-sm bg-[var(--admin-bg)] border border-[var(--admin-border)] text-[var(--admin-text-primary)] placeholder-gray-500 focus:outline-none focus:border-[var(--admin-brass)] transition-colors"
-              />{" "}
-            </div>{" "}
-          </div>{" "}
+                className="form-input pl-9"
+              />
+            </div>
+          </div>
           <div>
-            {" "}
-            <label className="block text-[var(--admin-text-secondary)] mb-1 font-medium">
+            <label className="form-label">
               Password
-            </label>{" "}
+            </label>
             <div className="relative">
-              {" "}
-              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--admin-text-secondary)]" />{" "}
+              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-admin-text-muted" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2.5 rounded-sm bg-[var(--admin-bg)] border border-[var(--admin-border)] text-[var(--admin-text-primary)] placeholder-gray-500 focus:outline-none focus:border-[var(--admin-brass)] transition-colors"
-              />{" "}
-            </div>{" "}
-          </div>{" "}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-sm bg-[var(--admin-accent)] hover:opacity-90 text-[#FFFFFF] font-semibold tracking-wide text-sm shadow-sm transition-all disabled:opacity-50 mt-2"
-          >
-            {" "}
-            {loading ? "Authenticating..." : "Sign In to Admin Dashboard"}{" "}
-          </button>{" "}
-        </form>{" "}
-        <div className="pt-4 border-t border-[var(--admin-border)] text-center text-[11px] text-[var(--admin-text-secondary)]">
-          {" "}
-          GSTIN: 21ARXPK7658Q1ZO{" "}
-        </div>{" "}
-      </div>{" "}
+                className="form-input pl-9"
+              />
+            </div>
+          </div>
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full h-[44px]"
+            >
+              {loading ? "Authenticating..." : "Sign In to Console"}
+            </button>
+          </div>
+        </form>
+        
+        <div className="pt-6 border-t border-admin-border text-center text-[12px] font-medium text-admin-text-muted">
+          GSTIN: 21ARXPK7658Q1ZO
+        </div>
+      </div>
     </div>
   );
 }
+

@@ -1,8 +1,10 @@
+export const dynamic = 'force-dynamic';
 import React from "react";
-import { MAJOR_CLIENTS } from "@/lib/data";
+import { getClientsData } from "@/lib/api";
 import { ShieldCheck } from "lucide-react";
 
-export default function ClientsPage() {
+export default async function ClientsPage() {
+  const MAJOR_CLIENTS = await getClientsData();
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 transition-colors duration-200">
       <div className="space-y-6 pb-12 border-b border-[var(--border-color)]">

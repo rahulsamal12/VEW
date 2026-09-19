@@ -1,13 +1,28 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchAdminData, updateAdminData } from "@/lib/adminApi";
-import { Save, Wrench } from "lucide-react";
+import { Save, Wrench , AlertCircle, RefreshCw} from "lucide-react";
 export default function MaintenanceAdminPage() {
   const [safetyData, setSafetyData] = useState<any>(null);
   const [msg, setMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const loadData = async () => {
-    const res = await fetchAdminData("/safety");
-    if (res && res.data) setSafetyData(res.data);
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetchAdminData("/safety");
+      if (res && res.data) {
+        setSafetyData(res.data);
+      } else {
+        setError(res?.error || res?.message || "Failed to load maintenance data. Database service may be unavailable.");
+      }
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
   };
   useEffect(() => {
     loadData();
@@ -20,79 +35,96 @@ export default function MaintenanceAdminPage() {
       setTimeout(() => setMsg(""), 3000);
     }
   };
-  if (!safetyData)
+  if (isLoading) {
     return (
-      <div className="text-[var(--text-muted)]">
-        Loading safety standards...
+      <div className="flex flex-col items-center justify-center py-20 text-admin-text-muted space-y-4">
+        <RefreshCw className="w-8 h-8 animate-spin text-admin-steel" />
+        <p className="font-medium">Loading data...</p>
       </div>
     );
-  return (
-    <div className="space-y-6 text-xs max-w-4xl">
-      {" "}
-      <div className="flex justify-between items-center border-b border-gray-800 pb-4">
-        {" "}
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
+        <div className="p-4 bg-rose-500/10 rounded-full">
+          <AlertCircle className="w-8 h-8 text-rose-500" />
+        </div>
         <div>
-          {" "}
-          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
+          <h3 className="text-[16px] font-bold text-admin-text-primary">Failed to load data</h3>
+          <p className="text-[13px] text-admin-text-secondary mt-1">{error}</p>
+        </div>
+        <button type="button" onClick={loadData} className="btn-secondary mt-2 gap-2">
+          <RefreshCw className="w-4 h-4" /> Try Again
+        </button>
+      </div>
+    );
+  }
+
+  if (!safetyData) return null;
+  return (
+    <div className="space-y-6 max-w-4xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-admin-border pb-4">
+        <div>
+          <h1 className="text-[24px] font-bold text-admin-text-primary tracking-tight">
             Maintenance & Safety Management
-          </h1>{" "}
-          <p className="text-[var(--text-muted)]">
-            Manage plant-wide maintenance procedures, work permits, PPE, and ISO
-            records.
-          </p>{" "}
-        </div>{" "}
+          </h1>
+          <p className="text-[13px] text-admin-text-secondary mt-1">
+            Manage plant-wide maintenance procedures, work permits, PPE, and ISO records.
+          </p>
+        </div>
         {msg && (
-          <span className="text-[var(--text-primary)] font-bold">{msg}</span>
-        )}{" "}
-      </div>{" "}
+          <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 text-[12px] font-bold uppercase tracking-wider rounded-sm shadow-sm">
+            {msg}
+          </div>
+        )}
+      </div>
+      
       <form onSubmit={handleSave} className="space-y-6">
-        {" "}
-        <div className="bg-[#111827] p-6 rounded-sm border border-gray-800 space-y-4">
-          {" "}
-          <h2 className="text-base font-bold text-[var(--text-primary)]">
+        <div className="bg-admin-surface p-6 sm:p-8 rounded-sm border border-admin-border shadow-sm space-y-6">
+          <h2 className="text-[16px] font-bold text-admin-text-primary border-b border-admin-border pb-3">
             Work Permits Required
-          </h2>{" "}
+          </h2>
           <div className="space-y-2">
-            {" "}
             {safetyData.permits &&
               safetyData.permits.map((p: string, idx: number) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded bg-[var(--bg-surface)] border border-gray-800 text-[var(--text-secondary)]"
+                  className="p-3 rounded-sm bg-admin-bg border border-admin-border text-[13px] text-admin-text-secondary flex items-center before:content-['•'] before:mr-2 before:text-admin-brass"
                 >
-                  {" "}
-                  • {p}{" "}
+                  {p}
                 </div>
-              ))}{" "}
-          </div>{" "}
-        </div>{" "}
-        <div className="bg-[#111827] p-6 rounded-sm border border-gray-800 space-y-4">
-          {" "}
-          <h2 className="text-base font-bold text-[var(--text-primary)]">
+              ))}
+          </div>
+        </div>
+        
+        <div className="bg-admin-surface p-6 sm:p-8 rounded-sm border border-admin-border shadow-sm space-y-6">
+          <h2 className="text-[16px] font-bold text-admin-text-primary border-b border-admin-border pb-3">
             PPE Requirements
-          </h2>{" "}
+          </h2>
           <div className="space-y-2">
-            {" "}
             {safetyData.ppeRequirements &&
               safetyData.ppeRequirements.map((ppe: string, idx: number) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded bg-[var(--bg-surface)] border border-gray-800 text-[var(--text-secondary)]"
+                  className="p-3 rounded-sm bg-admin-bg border border-admin-border text-[13px] text-admin-text-secondary flex items-center before:content-['•'] before:mr-2 before:text-admin-brass"
                 >
-                  {" "}
-                  • {ppe}{" "}
+                  {ppe}
                 </div>
-              ))}{" "}
-          </div>{" "}
-        </div>{" "}
-        <button
-          type="submit"
-          className="px-6 py-3 rounded-sm bg-cyan-500 text-[var(--text-primary)] font-bold text-sm flex items-center gap-2"
-        >
-          {" "}
-          <Save className="w-4 h-4" /> Save Maintenance & Safety Data{" "}
-        </button>{" "}
-      </form>{" "}
+              ))}
+          </div>
+        </div>
+        
+        <div className="flex justify-end pt-2">
+          <button
+            type="submit"
+            className="btn-primary gap-2"
+          >
+            <Save className="w-4 h-4" /> Save Maintenance & Safety Data
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
+

@@ -1,11 +1,17 @@
+export const dynamic = 'force-dynamic';
 import React from 'react'; 
 import { SITE_IMAGES } from '@/lib/images';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Flame, Layers, Factory, Globe } from 'lucide-react';
-import { FURNACE_PROJECTS, MRP_PROJECTS, SINTER_PROJECTS, INTERNATIONAL_PROJECTS } from '@/lib/data';
+import { getFurnaceProjectsData, getMRPProjectsData, getSinterProjectsData, getInternationalProjectsData } from '@/lib/api';
 
-export default function ProjectsHubPage() {
+export default async function ProjectsHubPage() {
+  const [FURNACE_PROJECTS, MRP_PROJECTS, SINTER_PROJECTS, INTERNATIONAL_PROJECTS] = await Promise.all([getFurnaceProjectsData(), getMRPProjectsData(), getSinterProjectsData(), getInternationalProjectsData()]);
+  const furnaceCount = FURNACE_PROJECTS?.length || 0;
+  const mrpCount = MRP_PROJECTS?.length || 0;
+  const sinterCount = SINTER_PROJECTS?.length || 0;
+  const intlCount = INTERNATIONAL_PROJECTS?.length || 0;
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 transition-colors duration-200">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pb-8 border-b border-[var(--border-color)]">
@@ -34,7 +40,7 @@ export default function ProjectsHubPage() {
             <div className="w-10 h-10 bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--accent-brass)] flex items-center justify-center">
               <Flame className="w-5 h-5" />
             </div>
-            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{FURNACE_PROJECTS.length} Key Projects</span>
+            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{furnaceCount} Key Projects</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-brass)] transition-colors">Furnace O&M Projects</h2>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed">Aarti Steels (18+ yrs), MSP Sponge, Electro Steel, Vision Sponge, Tata Steels, and Rungta Steels.</p>
@@ -48,7 +54,7 @@ export default function ProjectsHubPage() {
             <div className="w-10 h-10 bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-secondary)] flex items-center justify-center">
               <Layers className="w-5 h-5" />
             </div>
-            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{MRP_PROJECTS.length} Key Projects</span>
+            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{mrpCount} Key Projects</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-brass)] transition-colors">MRP Projects</h2>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed">Tata Steel (3x200 TPD BOOT), Jindal Stainless (1200 TPD BOOT), Sarda Metals, IFCAL, IMFA, and Shyam Metallics.</p>
@@ -62,7 +68,7 @@ export default function ProjectsHubPage() {
             <div className="w-10 h-10 bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] flex items-center justify-center">
               <Factory className="w-5 h-5" />
             </div>
-            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{SINTER_PROJECTS.length} Key Projects</span>
+            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{sinterCount} Key Projects</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-brass)] transition-colors">Sinter Projects</h2>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed">Vision Sponge (100 TPD), Singhal Energy, Shankar Ferro, Aarti Steels (200 TPD), and Real Ispat (200 TPD).</p>
@@ -76,7 +82,7 @@ export default function ProjectsHubPage() {
             <div className="w-10 h-10 bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--accent-brass)] flex items-center justify-center">
               <Globe className="w-5 h-5" />
             </div>
-            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{INTERNATIONAL_PROJECTS.length} Global Plants</span>
+            <span className="text-xs text-[var(--text-primary)] font-semibold bg-[var(--bg-surface)] px-2.5 py-1 border border-[var(--border-color)]">{intlCount} Global Plants</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-brass)] transition-colors">International Projects</h2>
           <p className="text-sm text-[var(--text-secondary)] leading-relaxed">Sohar Oman (Indsil Altaman 300 TPD) and Zambia (Omax, Bruhati, Amar, Shree Ramdoot MRP plants).</p>

@@ -3,9 +3,10 @@ import Image from 'next/image';
 import { SITE_IMAGES } from '@/lib/images';
 import Link from 'next/link';
 import { Layers, ArrowRight } from 'lucide-react';
-import { MRP_PROJECTS } from '@/lib/data';
+import { getMRPProjectsData } from '@/lib/api';
 
-export default function MRPServicePage() {
+export default async function MRPServicePage() {
+  const MRP_PROJECTS = await getMRPProjectsData();
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16 transition-colors duration-200">
       

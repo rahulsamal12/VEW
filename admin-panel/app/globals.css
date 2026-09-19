@@ -3,41 +3,64 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  
   /* Admin Light Theme */
   --admin-bg: #F7F7F4;
-  --admin-sidebar: #F7F7F4;
+  --admin-sidebar: #FFFFFF;
   --admin-surface: #FFFFFF;
-  --admin-elevated: #FFFFFF;
+  --admin-card: #FFFFFF;
   --admin-text-primary: #171A1C;
   --admin-text-secondary: #46515A;
+  --admin-text-muted: #66717A;
   --admin-border: #D7D9D6;
-  --admin-accent: #243746;
+  --admin-steel: #243746;
   --admin-brass: #B28A2E;
-  --admin-stripe: #F7F7F4;
 }
 
 html.dark {
   /* Admin Restrained Dark Theme */
   --admin-bg: #111315;
-  --admin-sidebar: #111315;
+  --admin-sidebar: #171A1D;
   --admin-surface: #1A1D20;
-  --admin-elevated: #202428;
+  --admin-card: #202428;
   --admin-text-primary: #F2F3F1;
   --admin-text-secondary: #C2C7C9;
+  --admin-text-muted: #92999D;
   --admin-border: #34393D;
-  --admin-accent: #3B5266;
+  --admin-steel: #243746; /* Keeping a dark steel for dark mode, but maybe brass is main accent */
   --admin-brass: #C19A45;
-  --admin-stripe: #111315;
 }
 
 body {
   background-color: var(--admin-bg);
   color: var(--admin-text-primary);
-  font-family: var(--font-sans);
+  font-family: var(--font-inter), system-ui, sans-serif;
   overflow-x: hidden;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-admin-steel hover:opacity-90 text-white text-[13px] font-semibold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed border border-transparent;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-admin-surface hover:bg-admin-bg text-admin-text-primary text-[13px] font-semibold transition-colors border border-admin-border disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-danger {
+    @apply inline-flex items-center justify-center px-4 py-2 bg-rose-600/10 hover:bg-rose-600/20 text-rose-600 text-[13px] font-semibold transition-colors border border-rose-600/30 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Forms */
+  .form-input {
+    @apply w-full px-3 py-2 bg-admin-bg border border-admin-border text-admin-text-primary text-[14px] placeholder-admin-text-muted focus:outline-none focus:border-admin-steel transition-colors;
+  }
+  
+  .form-label {
+    @apply block text-admin-text-secondary text-[12px] font-semibold uppercase tracking-wider mb-1.5;
+  }
 }
 
 /* Enterprise Data Table */
@@ -56,30 +79,27 @@ body {
 
 .admin-table th {
   background-color: var(--admin-bg);
-  color: var(--admin-text-primary);
-  font-weight: 700;
-  font-size: 0.75rem;
+  color: var(--admin-text-secondary);
+  font-weight: 600;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.75rem 1rem;
-  border-bottom: 2px solid var(--admin-border);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--admin-border);
 }
 
 .admin-table td {
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--admin-border);
   color: var(--admin-text-primary);
-  font-size: 0.8125rem;
-}
-
-.admin-table tbody tr:nth-child(even) {
-  background-color: var(--admin-stripe);
+  font-size: 13px;
 }
 
 .admin-table tbody tr:hover {
   background-color: var(--admin-bg);
 }
 
+/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   height: 6px;
   width: 6px;
