@@ -55,10 +55,7 @@ export default async function InnovationPage() {
               className="object-contain p-8 opacity-95 hover:opacity-100 transition-opacity duration-300" 
               priority
             />
-            {/* Technical Labels Overlay */}
-            <div className="absolute top-4 left-4 border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-sm px-2 py-1 text-[10px] font-mono font-bold tracking-wider text-[var(--text-muted)] uppercase">
-              FIG 1.0 — Diaphragm Jig
-            </div>
+
           </div>
         </div>
 
