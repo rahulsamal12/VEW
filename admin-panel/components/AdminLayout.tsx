@@ -25,7 +25,10 @@ import {
   ExternalLink,
   ChevronDown,
   User as UserIcon,
-  Briefcase
+  Briefcase,
+  Image as ImageIcon,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 export default function AdminLayout({
@@ -40,6 +43,20 @@ export default function AdminLayout({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
   const [isChecking, setIsChecking] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('vew-admin-sidebar');
+    if (saved === 'collapsed') {
+      setIsSidebarCollapsed(true);
+    }
+  }, []);
+
+  const toggleSidebar = () => {
+    const nextState = !isSidebarCollapsed;
+    setIsSidebarCollapsed(nextState);
+    localStorage.setItem('vew-admin-sidebar', nextState ? 'collapsed' : 'expanded');
+  };
 
   useEffect(() => {
     if (pathname !== "/login") {
@@ -94,6 +111,7 @@ export default function AdminLayout({
       items: [
         { label: "Dashboard", href: "/", icon: LayoutDashboard },
         { label: "Site Settings", href: "/settings", icon: Settings },
+        { label: "Site Images", href: "/images", icon: ImageIcon },
       ]
     },
     {
@@ -121,28 +139,34 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen flex bg-admin-bg transition-colors duration-200">
-      {/* Sidebar - Desktop */}
-      <aside className="hidden lg:flex w-[260px] flex-col bg-admin-sidebar border-r border-admin-border flex-shrink-0 z-20">
-        <div className="h-16 border-b border-admin-border flex items-center gap-3 px-5 flex-shrink-0">
-          <div className="w-8 h-8 bg-admin-steel text-white flex items-center justify-center font-bold text-sm rounded-sm">
+            {/* Sidebar - Desktop */}
+      <aside className={`relative hidden lg:flex flex-col bg-[#203746] flex-shrink-0 z-20 shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-[width] duration-250 ease-in-out ${isSidebarCollapsed ? 'w-[72px]' : 'w-[320px]'}`}>
+        <div className={`h-20 border-b border-[rgba(255,255,255,0.06)] flex items-center px-6 flex-shrink-0 transition-all duration-250 ${isSidebarCollapsed ? 'justify-center px-0 gap-0' : 'gap-3'}`}>
+          <div className="w-9 h-9 bg-admin-bg text-admin-steel flex items-center justify-center font-bold text-lg rounded-sm shrink-0 shadow-sm">
             V
           </div>
-          <div className="min-w-0">
-            <h1 className="font-semibold text-admin-text-primary text-[14px] truncate tracking-tight">
-              Venkateswar Engg
-            </h1>
-            <span className="text-[10px] text-admin-brass font-bold uppercase tracking-widest block truncate">
-              Admin Console
-            </span>
-          </div>
+          {!isSidebarCollapsed && (
+            <div className="min-w-0 flex flex-col justify-center overflow-hidden transition-all duration-250">
+              <h1 className="font-semibold text-[#F2F4F5] text-[15px] truncate tracking-tight leading-[1.2] whitespace-nowrap">
+                Venkateswar Engg
+              </h1>
+              <span className="text-[11px] text-[#C19A45] font-bold uppercase tracking-wider block truncate mt-0.5 whitespace-nowrap">
+                Admin Console
+              </span>
+            </div>
+          )}
         </div>
 
-        <nav className="flex-1 py-6 overflow-y-auto custom-scrollbar">
+        <nav className="flex-1 py-6 overflow-y-auto overflow-x-hidden custom-scrollbar">
           {navGroups.map((group, gIdx) => (
-            <div key={gIdx} className="mb-6">
-              <h3 className="px-5 text-[11px] font-bold text-admin-text-muted uppercase tracking-wider mb-2">
-                {group.title}
-              </h3>
+            <div key={gIdx} className="mb-8">
+              {!isSidebarCollapsed ? (
+                <h3 className="px-6 text-[12px] font-bold text-[#AEBBC3] uppercase tracking-[0.08em] mb-3 whitespace-nowrap">
+                  {group.title}
+                </h3>
+              ) : (
+                <div className="h-4 mb-3 border-b border-[rgba(255,255,255,0.06)] mx-4" aria-hidden="true"></div>
+              )}
               <div className="space-y-0.5">
                 {group.items.map((item, idx) => {
                   const Icon = item.icon;
@@ -151,14 +175,15 @@ export default function AdminLayout({
                     <Link
                       key={idx}
                       href={item.href}
-                      className={`flex items-center gap-3 px-5 py-2.5 transition-colors text-[13px] ${
+                      title={isSidebarCollapsed ? item.label : undefined}
+                      className={`group flex items-center ${isSidebarCollapsed ? 'justify-center px-0' : 'px-6 gap-[14px]'} h-[46px] transition-all duration-250 text-[15px] border-l-[3px] ${
                         active
-                          ? "bg-admin-bg text-admin-steel dark:text-admin-brass font-semibold border-l-2 border-admin-steel dark:border-admin-brass"
-                          : "text-admin-text-secondary hover:text-admin-text-primary hover:bg-admin-bg border-l-2 border-transparent"
+                          ? "bg-[#F4F5F2] text-[#17232B] font-semibold border-[#C19A45]"
+                          : "text-[#C7D0D6] font-medium border-transparent hover:bg-[rgba(255,255,255,0.06)] hover:text-[#F2F4F5]"
                       }`}
                     >
-                      <Icon className="w-4 h-4 shrink-0 opacity-80" />
-                      <span className="truncate">{item.label}</span>
+                      <Icon className={`w-[18px] h-[18px] shrink-0 transition-colors duration-250 ${active ? "text-[#405462]" : "text-[#AEBBC3] group-hover:text-[#D5DDE1]"}`} />
+                      {!isSidebarCollapsed && <span className="truncate whitespace-nowrap">{item.label}</span>}
                     </Link>
                   );
                 })}
@@ -166,9 +191,20 @@ export default function AdminLayout({
             </div>
           ))}
         </nav>
+        
+        <div className="mt-auto h-20 shrink-0" aria-hidden="true"></div>
+        <button
+          id="admin-sidebar-toggle"
+          onClick={toggleSidebar}
+          className="absolute right-[12px] bottom-[16px] w-[36px] h-[36px] flex items-center justify-center bg-[#294452] border border-[rgba(255,255,255,0.18)] text-[#F3F4F2] hover:bg-[#B68A2C] hover:text-[#FFFFFF] rounded-[6px] z-50 transition-colors focus:outline-none shadow-sm"
+          title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {isSidebarCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+        </button>
       </aside>
 
-      {/* Main Content Area */}
+{/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Top Header Bar */}
         <header className="h-16 bg-admin-surface border-b border-admin-border px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-10 sticky top-0">
@@ -239,52 +275,55 @@ export default function AdminLayout({
           </div>
         </header>
 
-        {/* Mobile Navigation Drawer */}
+                {/* Mobile Navigation Drawer */}
         {mobileOpen && (
-          <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setMobileOpen(false)}>
+          <div className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
             <div 
-              className="absolute top-0 left-0 w-[260px] h-full bg-admin-sidebar shadow-xl flex flex-col"
+              className="absolute top-0 left-0 w-[280px] h-full bg-[#203746] shadow-xl flex flex-col"
               onClick={e => e.stopPropagation()}
             >
-              <div className="h-16 border-b border-admin-border flex items-center justify-between px-5">
+              <div className="h-20 border-b border-[rgba(255,255,255,0.06)] flex items-center justify-between px-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-admin-steel text-white flex items-center justify-center font-bold text-sm rounded-sm">V</div>
-                  <h1 className="font-semibold text-admin-text-primary text-[14px]">VEW Admin</h1>
+                  <div className="w-9 h-9 bg-admin-bg text-admin-steel flex items-center justify-center font-bold text-lg rounded-sm shrink-0">V</div>
+                  <div className="flex flex-col">
+                    <h1 className="font-semibold text-[#F2F4F5] text-[15px] leading-[1.2]">VEW Admin</h1>
+                    <span className="text-[11px] text-[#C19A45] font-bold uppercase tracking-wider block mt-0.5">Console</span>
+                  </div>
                 </div>
-                <button onClick={() => setMobileOpen(false)} className="text-admin-text-secondary p-1">
-                  <X className="w-5 h-5" />
+                <button onClick={() => setMobileOpen(false)} className="text-[#AEBBC3] hover:text-[#F2F4F5] p-1 transition-colors">
+                  <X className="w-6 h-6" />
                 </button>
               </div>
-              <div className="p-4 flex-1 overflow-y-auto space-y-6 custom-scrollbar">
+              <div className="py-6 flex-1 overflow-y-auto custom-scrollbar">
                 {navGroups.map((group, gIdx) => (
-                  <div key={gIdx}>
-                    <h3 className="text-[11px] font-bold text-admin-text-muted uppercase tracking-wider mb-2">
+                  <div key={gIdx} className="mb-8">
+                    <h3 className="px-6 text-[12px] font-bold text-[#AEBBC3] uppercase tracking-[0.08em] mb-3">
                       {group.title}
                     </h3>
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                       {group.items.map((item, idx) => (
                         <Link
                           key={idx}
                           href={item.href}
                           onClick={() => setMobileOpen(false)}
-                          className={`flex items-center gap-3 px-3 py-2.5 text-[14px] rounded-sm font-medium ${
+                          className={`group flex items-center gap-[14px] px-6 h-[46px] transition-all duration-200 text-[15px] border-l-[3px] ${
                             pathname === item.href
-                              ? "bg-admin-bg text-admin-steel dark:text-admin-brass font-semibold"
-                              : "text-admin-text-secondary hover:text-admin-text-primary"
+                              ? "bg-[#F4F5F2] text-[#17232B] font-semibold border-[#C19A45]"
+                              : "text-[#C7D0D6] font-medium border-transparent hover:bg-[rgba(255,255,255,0.06)] hover:text-[#F2F4F5]"
                           }`}
                         >
-                          <item.icon className="w-4 h-4 opacity-80" />
-                          {item.label}
+                          <item.icon className={`w-[18px] h-[18px] shrink-0 transition-colors duration-200 ${pathname === item.href ? "text-[#405462]" : "text-[#AEBBC3] group-hover:text-[#D5DDE1]"}`} />
+                          <span className="truncate">{item.label}</span>
                         </Link>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="p-4 border-t border-admin-border bg-admin-bg">
+              <div className="p-4 border-t border-[rgba(255,255,255,0.06)]">
                  <button
                     onClick={handleLogout}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 border border-rose-600/30 bg-rose-600/10 text-rose-600 font-semibold text-[13px] rounded-sm transition-colors hover:bg-rose-600/20"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-[rgba(225,29,72,0.1)] hover:bg-[rgba(225,29,72,0.15)] text-rose-500 font-semibold text-[14px] rounded-sm transition-colors border border-[rgba(225,29,72,0.2)]"
                   >
                     <LogOut className="w-4 h-4" />
                     Secure Logout
@@ -294,7 +333,7 @@ export default function AdminLayout({
           </div>
         )}
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto custom-scrollbar bg-admin-bg">
+<main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto custom-scrollbar bg-admin-bg">
           <div className="max-w-[1400px] mx-auto">
             {children}
           </div>

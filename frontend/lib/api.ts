@@ -1,20 +1,41 @@
 import * as staticData from './data';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000/api';
 
 async function fetchFromApi<T>(endpoint: string, fallback: T): Promise<T> {
   try {
     const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
-    if (!res.ok) return fallback;
+    if (!res.ok) { console.error(`[API Fetch Error] Endpoint ${endpoint} returned status ${res.status}`); return fallback; }
     const json = await res.json();
     return json.data || fallback;
-  } catch (error) {
+  } catch (error) { console.error(`[API Fetch Error] Endpoint ${endpoint} failed:`, error.message);
     return fallback;
   }
 }
 
 export async function getCompanyInfo() {
-  return fetchFromApi('/settings', null);
+  return fetchFromApi('/settings', {
+    name: "Venkateswar Engg Works Pvt. Ltd.",
+    companyName: "Venkateswar Engg Works Pvt. Ltd.",
+    shortName: "Venkateswar Engg Works Pvt. Ltd.",
+    gstin: "21ARXPK7658Q1ZO",
+    founded: 2003,
+    description: "Leading metallurgical operations.",
+    vision: "To lead the metallurgical engineering sector with unmatched operational excellence and technical capability.",
+    founder: "Mr. Jayaram Kothari",
+    managingPartner: "Mr. Sreenivas Kothari",
+    contacts: [
+      { name: "Support", title: "General", phone: "+91 9999999999", email: "info@vew.com" }
+    ]
+  });
+}
+
+export async function getAboutData() {
+  return fetchFromApi('/about', {
+    overview: "",
+    foundersVision: "",
+    corePillars: []
+  });
 }
 
 export async function getHomepageData() {
@@ -150,6 +171,10 @@ export async function getManpowerData() {
   return fetchFromApi('/manpower', null);
 }
 
+export async function getJourneyData() {
+  return fetchFromApi('/journey', []);
+}
+
 export async function sendEnquiry(data: { name: string; company: string; email: string; phone: string; subject: string; message: string }) {
   try {
     const res = await fetch(`${API_BASE}/enquiry`, {
@@ -161,5 +186,23 @@ export async function sendEnquiry(data: { name: string; company: string; email: 
   } catch (error: any) {
     return { success: false, message: error?.message || 'Failed to connect to backend server' };
   }
+}
+
+import { SITE_IMAGES as fallbackImages } from './images';
+
+export async function getSiteImages() {
+  const dynamicImages: Record<string, string> = await fetchFromApi('/images', {});
+  
+  const mergedImages = { ...fallbackImages };
+  // If we have dynamic URLs, prepend the backend API base (if they are relative like /uploads/...)
+  const backendBase = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
+  
+  for (const [key, val] of Object.entries(dynamicImages)) {
+    if (val) {
+      mergedImages[key as keyof typeof fallbackImages] = val.startsWith('http') ? val : `${backendBase}${val}`;
+    }
+  }
+  
+  return mergedImages;
 }
 

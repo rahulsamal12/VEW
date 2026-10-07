@@ -5,81 +5,122 @@
 :root {
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Light Theme (Default) */
-  --bg-primary: #F7F7F4;
-  --bg-secondary: #F7F7F4;
+  /* Light Theme (Corporate Engineering) */
+  --bg-primary: #F6F6F2;
+  --bg-secondary: #ECEDE9;
   --bg-surface: #FFFFFF;
   --bg-elevated: #FFFFFF;
+  
   --text-primary: #171A1C;
-  --text-secondary: #46515A;
-  --text-body: #46515A;
-  --text-muted: #66717A;
-  --text-table-body: #46515A;
-  --border-color: #D7D9D6;
-  --border-subtle: #D7D9D6;
-  --accent-steel: #243746;
-  --accent-steel-hover: #171A1C;
-  --accent-brass: #B28A2E;
-  --accent-brass-muted: #C89F43;
-  --header-bg: rgba(247, 247, 244, 0.95);
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --table-stripe: #F7F7F4;
+  --text-secondary: #46545D;
+  --text-body: #46545D;
+  --text-muted: #737D82;
+  --text-table-body: #46545D;
+  
+  --border-color: #D8DCDA;
+  --border-subtle: #D8DCDA;
+  
+  --accent-steel: #203746;
+  --accent-steel-hover: #182B38;
+  --accent-brass: #B68A2C;
+  --accent-brass-hover: #9B7626;
+  --accent-light: #C19A45;
+  
+  --color-success: #3F6B55;
+  --color-warning: #A66A20;
+  --color-error: #9B3D3D;
+  
+  --header-nav-bg: #FFFFFF;
+  --header-top-bg: #E8ECE9;
+  --header-top-text: #46545D;
+  --header-text: #203746;
+  --header-text-secondary: #46545D;
+  --header-border: #D8DCDA;
+  --logo-bg: #F7F7F4;
+  --logo-border: #D8DCDA;
+  --theme-toggle-bg: transparent;
+  --theme-toggle-icon: #203746;
+  --theme-toggle-hover: transparent;
+  --header-bg: transparent;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --table-stripe: #F6F6F2;
 }
 
 html.dark {
-  /* Restrained Industrial Dark Theme */
-  --bg-primary: #111315;
-  --bg-secondary: #111315;
-  --bg-surface: #1A1D20;
-  --bg-elevated: #202428;
-  --text-primary: #F2F3F1;
-  --text-secondary: #C2C7C9;
-  --text-body: #C2C7C9;
+  /* Dark Theme (Restrained Industrial) */
+  --bg-primary: #151A1E;
+  --bg-secondary: #1D252B;
+  --bg-surface: #1D252B;
+  --bg-elevated: #294452;
+  
+  --text-primary: #F3F4F2;
+  --text-secondary: #C7D0D5;
+  --text-body: #C7D0D5;
   --text-muted: #92999D;
-  --text-table-body: #C2C7C9;
-  --border-color: #34393D;
-  --border-subtle: #34393D;
-  --accent-steel: #D7DEE2;
-  --accent-steel-hover: #FFFFFF;
+  --text-table-body: #C7D0D5;
+  
+  --border-color: #36434B;
+  --border-subtle: #36434B;
+  
+  --accent-steel: #294452;
+  --accent-steel-hover: #1D252B;
   --accent-brass: #C19A45;
-  --accent-brass-muted: #D8B75F;
+  --accent-brass-hover: #D1AA58;
+  --accent-light: #D1AA58;
+  
+  --color-success: #6E9B7D;
+  --color-warning: #D09A4A;
+  --color-error: #D06B6B;
+  
+  --header-nav-bg: #111A20;
+  --header-top-bg: #203746;
+  --header-top-text: #D1D9DD;
+  --header-text: #F3F4F2;
+  --header-text-secondary: #D1D9DD;
+  --header-border: rgba(255,255,255,0.12);
+  --logo-bg: #1D252B;
+  --logo-border: #36434B;
+  --theme-toggle-bg: transparent;
+  --theme-toggle-icon: #F3F4F2;
+  --theme-toggle-hover: transparent;
   --header-bg: rgba(17, 19, 21, 0.95);
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  --table-stripe: #111315;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --table-stripe: #141719;
 }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  overflow-x: hidden;
   transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Base Typography Scale Enforcement */
 @layer base {
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-[var(--text-primary)] tracking-tight;
+    @apply text-[var(--text-primary)];
   }
   
   h1 {
-    @apply text-4xl sm:text-5xl lg:text-6xl leading-[1.15];
+    @apply text-[36px] sm:text-[44px] lg:text-[52px] font-bold leading-[1.1] tracking-[-0.025em];
   }
   
   h2 {
-    @apply text-3xl sm:text-4xl leading-[1.2];
+    @apply text-[30px] sm:text-[34px] lg:text-[36px] font-bold leading-[1.2] tracking-[-0.02em];
   }
   
   h3 {
-    @apply text-2xl sm:text-3xl leading-[1.25];
+    @apply text-[22px] sm:text-[24px] lg:text-[26px] font-semibold leading-[1.3] text-[var(--accent-steel)] tracking-tight;
   }
   
   h4 {
-    @apply text-xl sm:text-2xl leading-[1.3];
+    @apply text-[18px] sm:text-[20px] font-semibold leading-[1.35] text-[var(--accent-steel)];
   }
   
   p {
-    @apply text-base sm:text-lg leading-[1.65] text-[var(--text-secondary)] max-w-[70ch];
+    @apply text-[15px] sm:text-[16px] lg:text-[17px] font-normal leading-[1.65] text-[var(--text-body)] max-w-[75ch];
   }
 }
 
@@ -88,8 +129,9 @@ body {
   .industrial-card {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
+    border-radius: 12px;
     box-shadow: var(--card-shadow);
-    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .industrial-card:hover {
@@ -97,46 +139,41 @@ body {
   }
 
   .industrial-button-primary {
-    @apply inline-flex items-center justify-center font-bold text-sm px-6 py-3 border transition-colors;
-    background-color: var(--accent-steel);
+    @apply inline-flex items-center justify-center font-semibold text-[14px] leading-none tracking-[0.01em] px-6 py-3 rounded-[8px] border duration-200 transition-colors;
+    background-color: var(--accent-brass);
     color: #FFFFFF;
-    border-color: var(--accent-steel);
-  }
-
-  html.dark .industrial-button-primary {
-    color: #111315;
-  }
-  html:not(.dark) .industrial-button-primary {
-    color: #FFFFFF;
+    border-color: var(--accent-brass);
   }
 
   .industrial-button-primary:hover {
-    background-color: var(--accent-steel-hover);
-    border-color: var(--accent-steel-hover);
+    background-color: var(--accent-steel);
+    border-color: var(--accent-steel);
+    color: #FFFFFF;
   }
 
   .industrial-button-secondary {
-    @apply inline-flex items-center justify-center font-bold text-sm px-6 py-3 border transition-colors;
+    @apply inline-flex items-center justify-center font-semibold text-[14px] leading-none tracking-[0.01em] px-6 py-3 rounded-[8px] border duration-200 transition-colors;
     background-color: transparent;
-    color: var(--text-primary);
-    border-color: var(--border-color);
-  }
-
-  .industrial-button-secondary:hover {
-    background-color: var(--bg-secondary);
+    color: var(--accent-steel);
     border-color: var(--accent-steel);
   }
 
+  .industrial-button-secondary:hover {
+    background-color: var(--accent-steel);
+    color: #FFFFFF;
+  }
+
   .industrial-button-accent {
-    @apply inline-flex items-center justify-center font-bold text-sm px-6 py-3 border transition-colors;
+    @apply inline-flex items-center justify-center font-semibold text-[14px] leading-none tracking-[0.01em] px-6 py-3 rounded-[8px] border duration-200 transition-colors;
     background-color: var(--accent-brass);
     color: #FFFFFF;
     border-color: var(--accent-brass);
   }
 
   .industrial-button-accent:hover {
-    background-color: #9A7B32;
-    border-color: #9A7B32;
+    background-color: #FFFFFF;
+    color: var(--accent-steel);
+    border-color: #FFFFFF;
   }
 }
 
@@ -144,6 +181,7 @@ body {
 .industrial-table-container {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
+  border-radius: 12px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -156,17 +194,17 @@ body {
 
 .industrial-table th {
   background-color: var(--bg-secondary);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-weight: 600;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
 }
 
 .industrial-table td {
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 1.25rem;
   border-bottom: 1px solid var(--border-subtle);
   color: var(--text-body);
   font-size: 0.875rem;
@@ -195,4 +233,123 @@ body {
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--accent-steel);
+}
+
+
+@layer base {
+  /* Typography System */
+  html, body {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+  }
+  
+  h1 {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.1 !important;
+    font-size: clamp(36px, 5vw, 52px) !important;
+  }
+  @media (min-width: 1440px) { h1 { font-size: 56px !important; } }
+  
+  h2 {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.15 !important;
+    font-size: clamp(30px, 4vw, 38px) !important;
+  }
+  
+  h3 {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: clamp(21px, 3vw, 24px) !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0 !important;
+  }
+  
+  h4 {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: clamp(17px, 2vw, 18px) !important;
+    line-height: 1.3 !important;
+  }
+  
+  p, li, span, div, a {
+    font-family: inherit;
+  }
+  
+  p {
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+    letter-spacing: 0 !important;
+  }
+  
+  .lead, .hero-paragraph {
+    font-size: 17px !important;
+    line-height: 1.7 !important;
+    max-width: 720px;
+  }
+}
+
+@layer components {
+  /* Navigation */
+  nav a, nav button {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+  
+  /* Buttons */
+  button, .industrial-button-primary, .industrial-button-secondary {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+  }
+  
+  /* KPI Typography */
+  .vew-kpi-number {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: clamp(32px, 4vw, 40px) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1 !important;
+  }
+  
+  /* Small Labels / Eyebrows */
+  .vew-label {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+  }
+  
+  /* Tables */
+  table th {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+  }
+  
+  table td {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+  }
+  
+  /* Footer Typography */
+  footer h4 {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+  }
+  footer p, footer span, footer a {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+  footer a {
+    font-weight: 500 !important;
+  }
 }

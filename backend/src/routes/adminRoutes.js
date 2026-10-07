@@ -4,8 +4,14 @@ const { protectAdmin } = require('../middleware/authMiddleware');
 const contentController = require('../controllers/contentController');
 const { getEnquiries, updateEnquiryStatus, deleteEnquiry } = require('../controllers/enquiryController');
 
+const imageController = require('../controllers/imageController');
+const upload = require('../middleware/uploadMiddleware');
+
 // Protect all admin routes
 router.use(protectAdmin);
+
+// Image Management
+router.post('/images/:section', upload.single('image'), imageController.uploadImage);
 
 // Single Doc Updates
 router.put('/settings', contentController.updateSiteSettings);

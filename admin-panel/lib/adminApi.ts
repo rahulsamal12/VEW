@@ -43,7 +43,9 @@ export async function loginAdmin(credentials: { username: string; password: stri
 export async function fetchAdminData(endpoint: string) {
   const token = getToken();
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const separator = endpoint.includes('?') ? '&' : '?';
+    const timestampedEndpoint = `${endpoint}${separator}_t=${Date.now()}`;
+    const res = await fetch(`${API_BASE}${timestampedEndpoint}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
@@ -79,6 +81,32 @@ export async function updateAdminData(endpoint: string, data: any, method: 'POST
     }
 
     const res = await fetch(`${API_BASE}${endpoint}`, options);
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch(e) {
+      return { success: false, message: `Server error: ${res.status} ${res.statusText}` };
+    }
+  } catch (error: any) {
+    return { success: false, message: error?.message };
+  }
+}
+
+export async function uploadAdminImage(section: string, file: File) {
+  const token = getToken();
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    const res = await fetch(`${API_BASE}/admin/images/${section}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+        // Do NOT set Content-Type; browser will set it with the boundary for FormData
+      },
+      body: formData
+    });
+    
     const text = await res.text();
     try {
       return JSON.parse(text);

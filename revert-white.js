@@ -1,0 +1,1 @@
+const fs = require('fs'); ['D:/VEW/frontend/components/Footer.tsx', 'D:/VEW/frontend/components/Navbar.tsx'].forEach(f => { let c = fs.readFileSync(f, 'utf8'); c = c.replace(/var\(--vew-white\)/g, '#FFFFFF'); fs.writeFileSync(f, c, 'utf8'); console.log('Reverted in ' + f); });

@@ -21,6 +21,12 @@ export const metadata: Metadata = {
   authors: [{ name: "Venkateswar Engg Works Pvt. Ltd." }],
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({
   children,
 }: {

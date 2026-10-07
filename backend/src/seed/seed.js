@@ -22,7 +22,7 @@ const Safety = require('../models/Safety');
 const KPI = require('../models/KPIs');
 const Manpower = require('../models/Manpower');
 
-dotenv.config();
+dotenv.config({ path: ['./.env.local', './.env'] });
 
 const seedDatabase = async () => {
   try {
@@ -95,10 +95,10 @@ const seedDatabase = async () => {
     await upsertList(HistoryTimeline, seedData.historyTimeline, 'year');
     await upsertList(Service, seedData.services, 'title');
     await upsertList(Client, seedData.clients, 'name');
-    await upsertList(InternationalProject, seedData.internationalProjects, 'clientName');
-    await upsertList(FurnaceProject, seedData.furnaceProjects, 'clientName');
-    await upsertList(MRPProject, seedData.mrpProjects, 'clientName');
-    await upsertList(SinterProject, seedData.sinterProjects, 'clientName');
+    await upsertList(InternationalProject, seedData.internationalProjects, 'client');
+    await upsertList(FurnaceProject, seedData.furnaceProjects, 'client');
+    await upsertList(MRPProject, seedData.mrpProjects, 'client');
+    await upsertList(SinterProject, seedData.sinterProjects, 'client');
 
     console.log('\n--- SEED COMPLETED SUCCESSFULLY ---');
     console.log(`Inserted: ${stats.inserted}`);

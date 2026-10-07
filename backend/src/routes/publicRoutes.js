@@ -4,7 +4,10 @@ const { check } = require('express-validator');
 const contentController = require('../controllers/contentController');
 const { submitEnquiry } = require('../controllers/enquiryController');
 
+const imageController = require('../controllers/imageController');
+
 // Content API Endpoints
+router.get('/images', imageController.getAllImages);
 router.get('/settings', contentController.getSiteSettings);
 router.get('/homepage', contentController.getHomepage);
 router.get('/about', contentController.getAbout);

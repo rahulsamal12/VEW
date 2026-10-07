@@ -4,30 +4,36 @@
 
 :root {
   /* Admin Light Theme */
-  --admin-bg: #F7F7F4;
-  --admin-sidebar: #FFFFFF;
-  --admin-surface: #FFFFFF;
+  --admin-bg: #F6F6F2;
+  --admin-sidebar: #203746;
+  --admin-surface: #F6F6F2;
   --admin-card: #FFFFFF;
   --admin-text-primary: #171A1C;
-  --admin-text-secondary: #46515A;
-  --admin-text-muted: #66717A;
-  --admin-border: #D7D9D6;
-  --admin-steel: #243746;
-  --admin-brass: #B28A2E;
+  --admin-text-secondary: #46545D;
+  --admin-text-muted: #737D82;
+  --admin-border: #D8DCDA;
+  --admin-border-subtle: #D8DCDA;
+  --admin-steel: #203746;
+  --admin-steel-hover: #182B38;
+  --admin-brass: #B68A2C;
+  --admin-brass-hover: #9B7626;
 }
 
 html.dark {
   /* Admin Restrained Dark Theme */
-  --admin-bg: #111315;
-  --admin-sidebar: #171A1D;
-  --admin-surface: #1A1D20;
-  --admin-card: #202428;
-  --admin-text-primary: #F2F3F1;
-  --admin-text-secondary: #C2C7C9;
+  --admin-bg: #151A1E;
+  --admin-sidebar: #1D252B;
+  --admin-surface: #151A1E;
+  --admin-card: #294452;
+  --admin-text-primary: #F3F4F2;
+  --admin-text-secondary: #C7D0D5;
   --admin-text-muted: #92999D;
-  --admin-border: #34393D;
-  --admin-steel: #243746; /* Keeping a dark steel for dark mode, but maybe brass is main accent */
+  --admin-border: #36434B;
+  --admin-border-subtle: #36434B;
+  --admin-steel: #F3F4F2;
+  --admin-steel-hover: #FFFFFF;
   --admin-brass: #C19A45;
+  --admin-brass-hover: #D1AA58;
 }
 
 body {
@@ -42,24 +48,53 @@ body {
 @layer components {
   /* Buttons */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-admin-steel hover:opacity-90 text-white text-[13px] font-semibold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed border border-transparent;
+    @apply inline-flex items-center justify-center px-5 py-2.5 text-white text-[14px] font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed border rounded-[2px];
+    background-color: var(--admin-brass);
+    border-color: var(--admin-brass);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--admin-steel);
+    border-color: var(--admin-steel);
   }
   
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-admin-surface hover:bg-admin-bg text-admin-text-primary text-[13px] font-semibold transition-colors border border-admin-border disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-5 py-2.5 text-[14px] font-semibold transition-colors border disabled:opacity-50 disabled:cursor-not-allowed rounded-[2px];
+    background-color: transparent;
+    color: var(--admin-steel);
+    border-color: var(--admin-steel);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--admin-steel);
+    color: #FFFFFF;
+    border-color: var(--admin-steel);
   }
   
   .btn-danger {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-rose-600/10 hover:bg-rose-600/20 text-rose-600 text-[13px] font-semibold transition-colors border border-rose-600/30 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-5 py-2.5 bg-white text-rose-600 text-[14px] font-semibold transition-colors border border-admin-border disabled:opacity-50 disabled:cursor-not-allowed rounded-[2px];
+  }
+  html.dark .btn-danger {
+    background-color: var(--admin-surface);
+  }
+  .btn-danger:hover:not(:disabled) {
+    background-color: #FEE2E2;
+    border-color: #EF4444;
+  }
+  html.dark .btn-danger:hover:not(:disabled) {
+    background-color: rgba(225, 29, 72, 0.1);
+    border-color: #E11D48;
   }
 
   /* Forms */
   .form-input {
-    @apply w-full px-3 py-2 bg-admin-bg border border-admin-border text-admin-text-primary text-[14px] placeholder-admin-text-muted focus:outline-none focus:border-admin-steel transition-colors;
+    @apply w-full px-3 py-2.5 bg-admin-surface border border-admin-border text-admin-text-primary text-[14px] placeholder-admin-text-muted focus:outline-none focus:border-admin-steel transition-colors rounded-[2px];
   }
   
   .form-label {
-    @apply block text-admin-text-secondary text-[12px] font-semibold uppercase tracking-wider mb-1.5;
+    @apply block text-admin-text-secondary text-[11px] font-bold uppercase tracking-wider mb-2;
+  }
+
+  .admin-card {
+    @apply bg-admin-surface border border-admin-border rounded-[2px] shadow-sm;
   }
 }
 
@@ -67,6 +102,7 @@ body {
 .admin-table-container {
   background-color: var(--admin-surface);
   border: 1px solid var(--admin-border);
+  border-radius: 2px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -81,18 +117,26 @@ body {
   background-color: var(--admin-bg);
   color: var(--admin-text-secondary);
   font-weight: 600;
-  font-size: 12px;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 10px 16px;
+  padding: 0.75rem 1.25rem;
   border-bottom: 1px solid var(--admin-border);
 }
 
 .admin-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--admin-border);
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid var(--admin-border-subtle);
   color: var(--admin-text-primary);
-  font-size: 13px;
+  font-size: 0.875rem;
+}
+
+.admin-table tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+html.dark .admin-table tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 .admin-table tbody tr:hover {
@@ -110,4 +154,7 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: var(--admin-border);
   border-radius: 2px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-steel);
 }

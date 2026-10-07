@@ -32,24 +32,37 @@ export default function MRPProjectsAdminPage() {
   }, []);
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    let res;
     if (editingItem && editingItem._id) {
-      await updateAdminData(
+      res = await updateAdminData(
         `/admin/projects/mrp/${editingItem._id}`,
         formData,
-        "PUT",
+        "PUT"
       );
     } else {
-      await updateAdminData("/admin/projects/mrp", formData, "POST");
+      res = await updateAdminData("/admin/projects/mrp", formData, "POST");
     }
-    setIsModalOpen(false);
-    setEditingItem(null);
-    loadData();
+
+    if (res && res.success) {
+      setIsModalOpen(false);
+      setEditingItem(null);
+      // Optimistic update
+      if (editingItem && editingItem._id) {
+         setItems(prev => prev.map(item => item._id === editingItem._id ? res.data : item));
+      } else {
+         setItems(prev => [res.data, ...prev]);
+      }
+      await loadData();
+    } else {
+      alert(res?.message || "Failed to save project");
+    }
   };
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this MRP Project?")) {
       const res = await updateAdminData(`/admin/projects/mrp/${id}`, {}, "DELETE");
       if (res && res.success) {
-        loadData();
+        setItems(prev => prev.filter(item => item._id !== id));
+        await loadData();
       } else {
         alert(res?.message || "Failed to delete");
       }
@@ -106,7 +119,7 @@ export default function MRPProjectsAdminPage() {
           </thead>
           <tbody>
             {items.map((row, idx) => (
-              <tr key={idx}>
+              <tr key={row._id || idx}>
                 <td className="font-bold">{row.client}</td>
                 <td className="text-admin-steel dark:text-admin-brass font-semibold">{row.scope}</td>
                 <td>{row.type}</td>

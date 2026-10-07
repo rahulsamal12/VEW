@@ -1,40 +1,45 @@
-export const dynamic = 'force-dynamic';
-import React from "react"; 
-import { SITE_IMAGES } from '@/lib/images';
+export const dynamic = "force-dynamic";
+import React from "react";
+import { getSiteImages } from "@/lib/api";
 import Image from "next/image";
 import { getRawMaterialsData } from "@/lib/api";
 import { Layers, CheckCircle2, ShieldAlert } from "lucide-react";
 export default async function RawMaterialsSopPage() {
+  const SITE_IMAGES = await getSiteImages();
   const RAW_MATERIAL_DATA = await getRawMaterialsData();
-  if (!RAW_MATERIAL_DATA) return <div className="p-8 text-center text-gray-500">Service temporarily unavailable.</div>;
+  if (!RAW_MATERIAL_DATA)
+    return (
+      <div className="p-8 text-center text-[var(--text-muted)]">
+        Service temporarily unavailable.
+      </div>
+    );
   const { operatingConditions, materials, note, excelNote, storageShed } =
     RAW_MATERIAL_DATA;
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[110px] pb-16 md:pt-[140px] md:pb-20 space-y-12">
       {" "}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pb-8">
         <div className="lg:col-span-7 space-y-4">
           <h1 className="text-3xl sm:text-5xl font-bold text-[var(--text-primary)] leading-tight tracking-tight">
             Raw Material Requirements & Storage Shed
           </h1>
-          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+          <p className="text-[16px] md:text-[18px] text-[var(--text-secondary)] font-normal leading-[1.75]">
             Official raw material consumption matrix, monthly requirements, size
             specifications, operating conditions, and 3-month inventory storage
             shed guidelines.
           </p>
         </div>
 
-        <div className="lg:col-span-5 relative w-full aspect-video bg-[var(--bg-secondary)] border border-[var(--border-color)] overflow-hidden rounded-md shadow-sm">
-          <Image 
-            src={SITE_IMAGES.rawMaterials} 
-            alt="Raw Materials Stockpile" 
-            fill 
+        <div className="lg:col-span-5 relative w-full aspect-video bg-[var(--bg-secondary)] border border-[var(--border-color)] overflow-hidden rounded-[8px] shadow-sm">
+          <Image
+            src={SITE_IMAGES.rawMaterials}
+            alt="Raw Materials Stockpile"
+            fill
             sizes="(max-width: 1024px) 100vw, 40vw"
-            className="object-cover object-center opacity-90 hover:opacity-100 transition-opacity duration-500" 
+            className="object-cover object-center opacity-90 hover:opacity-100 transition-opacity duration-500"
           />
         </div>
       </div>
-
       {/* Operating Conditions Banner */}{" "}
       <div className="py-8 border-t border-[var(--border-subtle)] space-y-4">
         {" "}
@@ -156,14 +161,14 @@ export default async function RawMaterialsSopPage() {
         {/* Source Notes */}{" "}
         <div className="pt-4 space-y-2 border-t border-[var(--border-color)] text-xs">
           {" "}
-          <div className="p-3 rounded-sm bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] flex items-center gap-2">
+          <div className="p-3 rounded-[4px] bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] flex items-center gap-2">
             {" "}
             <ShieldAlert className="w-4 h-4 shrink-0" />{" "}
             <span>
               <strong>Note:</strong> {note}
             </span>{" "}
           </div>{" "}
-          <div className="py-3 border-b border-[var(--border-subtle)] text-[var(--text-secondary)] font-mono text-[11px]">
+          <div className="py-3 border-b border-[var(--border-subtle)] text-[var(--text-secondary)] tabular-nums text-[12px]">
             {" "}
             {excelNote}{" "}
           </div>{" "}
@@ -221,5 +226,3 @@ export default async function RawMaterialsSopPage() {
     </div>
   );
 }
-
-

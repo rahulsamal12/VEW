@@ -42,3 +42,7 @@ fix_dynamic.js
 fix_frontend_pages.js
 test_e2e.js
 query
+
+.env
+.env.local
+.env.*.local
