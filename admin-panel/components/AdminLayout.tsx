@@ -117,6 +117,10 @@ export default function AdminLayout({
     {
       title: "CONTENT MANAGEMENT",
       items: [
+        { label: "Home Page", href: "/home", icon: LayoutDashboard },
+        { label: "About Us", href: "/about", icon: FileText },
+        { label: "Company Journey", href: "/journey", icon: FileText },
+        { label: "Engineering in Action", href: "/engineering-in-action", icon: Globe },
         { label: "Furnace O&M", href: "/projects/furnace", icon: Flame },
         { label: "MRP Projects", href: "/projects/mrp", icon: Layers },
         { label: "Sinter Projects", href: "/projects/sinter", icon: Factory },

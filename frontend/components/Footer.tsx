@@ -8,10 +8,10 @@ export default async function Footer() {
   if (!COMPANY_INFO) return null;
   return (
     <footer className="bg-[var(--accent-steel)] text-[#D1D9DD] font-sans border-t border-[rgba(255,255,255,0.15)] transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-12">
-          {/* Col 1: Brand & About (Span 4) */}
-          <div className="lg:col-span-4 space-y-8">
+      <div className="w-full max-w-[1280px] mx-auto px-[18px] md:px-[24px] lg:px-[40px] py-[48px] lg:py-[64px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 items-start">
+          {/* Col 1: Brand & About */}
+          <div className="space-y-6 lg:space-y-8">
             <div className="flex flex-col gap-2">
               <span className="company-logo text-[24px] md:text-[28px] text-[#F3F4F2]">
                 Venkateswar Engg
@@ -38,8 +38,8 @@ export default async function Footer() {
             </div>
           </div>
 
-          {/* Col 2: Core Capabilities (Span 3) */}
-          <div className="lg:col-span-3">
+          {/* Col 2: Core Capabilities */}
+          <div className="">
             <h4 className="text-[#F3F4F2] font-bold text-[13px] tracking-wider mb-8 uppercase">
               Core Capabilities
             </h4>
@@ -103,8 +103,8 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: Operations & Projects (Span 3) */}
-          <div className="lg:col-span-3">
+          {/* Col 3: Operations & Projects */}
+          <div className="">
             <h4 className="text-[#F3F4F2] font-bold text-[13px] tracking-wider mb-8 uppercase">
               Operations & Projects
             </h4>
@@ -176,8 +176,8 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Col 4: Leadership Contact (Span 2) */}
-          <div className="lg:col-span-2">
+          {/* Col 4: Leadership Contact */}
+          <div className="">
             <h4 className="text-[#F3F4F2] font-bold text-[13px] tracking-wider mb-8 uppercase">
               Leadership & Contact
             </h4>
@@ -217,7 +217,7 @@ export default async function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-[rgba(255,255,255,0.15)] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4">
+        <div className="mt-12 pt-6 border-t border-[rgba(255,255,255,0.15)] flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4">
           <p className="text-[#C7D0D5] text-[13px] md:text-[14px] font-normal text-center md:text-left">
             © {new Date().getFullYear()} Venkateswar Engg Works Pvt. Ltd. All
             Rights Reserved.

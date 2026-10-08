@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { fetchAdminData, updateAdminData } from "@/lib/adminApi";
+import { fetchAdminData, updateAdminData, uploadAdminImage } from "@/lib/adminApi";
 import { Plus, Edit2, Trash2, Search, AlertCircle, RefreshCw, Briefcase, X } from "lucide-react";
 
 export default function ClientsAdminPage() {
@@ -12,6 +12,19 @@ export default function ClientsAdminPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentClient, setCurrentClient] = useState<any>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+
+  const getImageUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/uploads/')) {
+      return `http://localhost:5000${url}`;
+    }
+    if (url.startsWith('/images/')) {
+      return `http://localhost:3000${url}`;
+    }
+    return url;
+  };
   
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [clientToDelete, setClientToDelete] = useState<any>(null);
@@ -74,6 +87,24 @@ export default function ClientsAdminPage() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setCurrentClient(null);
+  };
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setUploadingLogo(true);
+      const file = e.target.files[0];
+      const res = await uploadAdminImage("clients", file);
+      if (res && res.success) {
+        setCurrentClient({ ...currentClient, logo: res.data.url });
+      } else {
+        setFormMsg(res?.message || "Logo upload failed");
+      }
+      setUploadingLogo(false);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setCurrentClient({ ...currentClient, logo: "" });
   };
 
   const handleSaveClient = async (e: React.FormEvent) => {
@@ -196,6 +227,7 @@ export default function ClientsAdminPage() {
           <table className="w-full text-left text-[13px]">
             <thead className="bg-admin-bg border-b border-admin-border text-admin-text-muted font-bold uppercase tracking-wider text-[11px]">
               <tr>
+                <th className="px-6 py-4">Logo</th>
                 <th className="px-6 py-4">Client Name</th>
                 <th className="px-6 py-4">Full Legal Name</th>
                 <th className="px-6 py-4">Category</th>
@@ -213,6 +245,17 @@ export default function ClientsAdminPage() {
               ) : (
                 filteredClients.map((client) => (
                   <tr key={client._id} className="hover:bg-admin-bg/50 transition-colors">
+                    <td className="px-6 py-4">
+                      {client.logo ? (
+                        <div className="w-[48px] h-[48px] rounded-sm bg-white border border-admin-border flex items-center justify-center p-1">
+                          <img src={getImageUrl(client.logo)} alt={client.name} className="w-full h-full object-contain" />
+                        </div>
+                      ) : (
+                        <div className="w-[48px] h-[48px] rounded-sm bg-admin-surface border border-admin-border flex items-center justify-center text-[10px] text-admin-text-muted text-center leading-tight">
+                          No Logo
+                        </div>
+                      )}
+                    </td>
                     <td className="px-6 py-4 font-semibold text-admin-text-primary whitespace-nowrap">
                       {client.name}
                     </td>
@@ -272,6 +315,27 @@ export default function ClientsAdminPage() {
                   {formMsg}
                 </div>
               )}
+
+              <div>
+                <label className="form-label">Client Logo (Optional)</label>
+                <div className="flex gap-4 items-center mt-2">
+                  {currentClient.logo ? (
+                    <div className="flex gap-4 items-center">
+                      <div className="w-[48px] h-[48px] rounded-sm bg-white border border-admin-border flex items-center justify-center p-1">
+                        <img src={getImageUrl(currentClient.logo)} alt="preview" className="w-full h-full object-contain" />
+                      </div>
+                      <button type="button" onClick={handleRemoveLogo} className="text-[12px] text-rose-500 hover:text-rose-600 font-bold tracking-wider uppercase">
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <input type="file" accept="image/*" onChange={handleLogoUpload} className="text-[13px]" />
+                      {uploadingLogo && <span className="text-[12px] text-admin-brass">Uploading...</span>}
+                    </div>
+                  )}
+                </div>
+              </div>
               
               <div>
                 <label className="form-label">Client Name (Display Name) *</label>

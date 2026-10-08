@@ -21,6 +21,7 @@ connectDB();
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api', require('./routes/publicRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/engineering-in-action', require('./routes/engineeringInActionRoutes'));
 
 // Root endpoint for API health check
 app.get('/', (req, res) => {

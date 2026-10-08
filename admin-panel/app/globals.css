@@ -21,19 +21,19 @@
 
 html.dark {
   /* Admin Restrained Dark Theme */
-  --admin-bg: #151A1E;
-  --admin-sidebar: #1D252B;
-  --admin-surface: #151A1E;
-  --admin-card: #294452;
-  --admin-text-primary: #F3F4F2;
-  --admin-text-secondary: #C7D0D5;
-  --admin-text-muted: #92999D;
-  --admin-border: #36434B;
-  --admin-border-subtle: #36434B;
-  --admin-steel: #F3F4F2;
-  --admin-steel-hover: #FFFFFF;
-  --admin-brass: #C19A45;
-  --admin-brass-hover: #D1AA58;
+  --admin-bg: #11181D;
+  --admin-sidebar: #0D151A;
+  --admin-surface: #18242B;
+  --admin-card: #20313A;
+  --admin-text-primary: #F4F5F3;
+  --admin-text-secondary: #B9C3C7;
+  --admin-text-muted: #8E9BA1;
+  --admin-border: #34444C;
+  --admin-border-subtle: #34444C;
+  --admin-steel: #203746;
+  --admin-steel-hover: #182B38;
+  --admin-brass: #B68A2C;
+  --admin-brass-hover: #C69A3A;
 }
 
 body {
@@ -55,6 +55,10 @@ body {
   .btn-primary:hover:not(:disabled) {
     background-color: var(--admin-steel);
     border-color: var(--admin-steel);
+  }
+  html.dark .btn-primary:hover:not(:disabled) {
+    background-color: var(--admin-brass-hover);
+    border-color: var(--admin-brass-hover);
   }
   
   .btn-secondary {
@@ -136,11 +140,15 @@ body {
 }
 
 html.dark .admin-table tbody tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: var(--admin-bg);
 }
 
 .admin-table tbody tr:hover {
   background-color: var(--admin-bg);
+}
+
+html.dark .admin-table tbody tr:hover {
+  background-color: var(--admin-card);
 }
 
 /* Custom Scrollbar */

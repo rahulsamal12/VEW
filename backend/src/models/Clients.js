@@ -4,6 +4,7 @@ const ClientSchema = new mongoose.Schema({
   name: { type: String, required: true },
   fullName: { type: String },
   category: { type: String, default: 'Major Client' },
+  logo: { type: String },
   sourceRef: { type: String, default: 'Source: Company Credentials — Page 4' },
   order: { type: Number, default: 0 }
 });

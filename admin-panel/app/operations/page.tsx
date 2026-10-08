@@ -4,6 +4,7 @@ import { fetchAdminData, updateAdminData } from "@/lib/adminApi";
 import { Save, FileText , AlertCircle, RefreshCw} from "lucide-react";
 export default function OperationsAdminPage() {
   const [data, setData] = useState<any>(null);
+  const [kpiData, setKpiData] = useState<any>(null);
   const [msg, setMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,10 +13,13 @@ export default function OperationsAdminPage() {
     setError(null);
     try {
       const res = await fetchAdminData("/operations");
-      if (res && res.data) {
+      const kpiRes = await fetchAdminData("/kpis");
+      
+      if (res && res.data && kpiRes && kpiRes.data) {
         setData(res.data);
+        setKpiData(kpiRes.data);
       } else {
-        setError(res?.error || res?.message || "Failed to load operations data. Database service may be unavailable.");
+        setError(res?.error || res?.message || kpiRes?.error || "Failed to load operations data. Database service may be unavailable.");
       }
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
@@ -29,7 +33,8 @@ export default function OperationsAdminPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await updateAdminData("/admin/operations", data, "PUT");
-    if (res.success) {
+    const kpiRes = await updateAdminData("/admin/kpis", kpiData, "PUT");
+    if (res.success && kpiRes.success) {
       setMsg("Operational SOP content saved successfully!");
       setTimeout(() => setMsg(""), 3000);
     }
@@ -129,37 +134,135 @@ export default function OperationsAdminPage() {
         
         <div className="bg-admin-surface p-6 sm:p-8 rounded-sm border border-admin-border shadow-sm space-y-6">
           <h2 className="text-[16px] font-bold text-admin-text-primary border-b border-admin-border pb-3">
-            Slag Granulation & Metal Recovery Notes
+            Operations / SOPs
           </h2>
           
           <div className="space-y-6">
-            <div>
-              <label className="form-label">
-                Slag Granulation Note
-              </label>
-              <textarea
-                rows={3}
-                value={data.slagGranulationNote || ""}
-                onChange={(e) =>
-                  setData({ ...data, slagGranulationNote: e.target.value })
-                }
-                className="form-input resize-y"
-              />
-            </div>
-            
-            <div>
-              <label className="form-label">
-                Metal Recovery Plant Note
-              </label>
-              <textarea
-                rows={3}
-                value={data.metalRecoveryNote || ""}
-                onChange={(e) =>
-                  setData({ ...data, metalRecoveryNote: e.target.value })
-                }
-                className="form-input resize-y"
-              />
-            </div>
+            {data.steps && data.steps.map((step: any, idx: number) => (
+              <div key={idx} className="border border-admin-border p-4 rounded-sm space-y-4">
+                <h3 className="font-bold text-[14px] text-admin-text-primary">Step {step.stepNumber}</h3>
+                <div>
+                  <label className="form-label">Title</label>
+                  <input
+                    type="text"
+                    value={step.name || ""}
+                    onChange={(e) => {
+                      const newSteps = [...data.steps];
+                      newSteps[idx].name = e.target.value;
+                      setData({ ...data, steps: newSteps });
+                    }}
+                    className="form-input font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Description</label>
+                  <textarea
+                    rows={3}
+                    value={step.overview || ""}
+                    onChange={(e) => {
+                      const newSteps = [...data.steps];
+                      newSteps[idx].overview = e.target.value;
+                      setData({ ...data, steps: newSteps });
+                    }}
+                    className="form-input resize-y"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-admin-surface p-6 sm:p-8 rounded-sm border border-admin-border shadow-sm space-y-6">
+          <h2 className="text-[16px] font-bold text-admin-text-primary border-b border-admin-border pb-3">
+            Grade Specifications Matrix
+          </h2>
+          
+          <div className="space-y-6">
+            {kpiData?.grades && kpiData.grades.map((grade: any, idx: number) => (
+              <div key={idx} className="border border-admin-border p-4 rounded-sm space-y-4">
+                <h3 className="font-bold text-[14px] text-admin-text-primary">Grade {idx + 1} Name / Column</h3>
+                <div>
+                  <label className="form-label">Grade Name</label>
+                  <input
+                    type="text"
+                    value={grade.gradeName || ""}
+                    onChange={(e) => {
+                      const newGrades = [...kpiData.grades];
+                      newGrades[idx].gradeName = e.target.value;
+                      setKpiData({ ...kpiData, grades: newGrades });
+                    }}
+                    className="form-input font-medium"
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="form-label">Mn : Fe Ratio</label>
+                    <input
+                      type="text"
+                      value={grade.mnFeRatio || ""}
+                      onChange={(e) => {
+                        const newGrades = [...kpiData.grades];
+                        newGrades[idx].mnFeRatio = e.target.value;
+                        setKpiData({ ...kpiData, grades: newGrades });
+                      }}
+                      className="form-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Carbon Input</label>
+                    <input
+                      type="text"
+                      value={grade.carbonInput || ""}
+                      onChange={(e) => {
+                        const newGrades = [...kpiData.grades];
+                        newGrades[idx].carbonInput = e.target.value;
+                        setKpiData({ ...kpiData, grades: newGrades });
+                      }}
+                      className="form-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Avg Mn Input</label>
+                    <input
+                      type="text"
+                      value={grade.avgMnInput || ""}
+                      onChange={(e) => {
+                        const newGrades = [...kpiData.grades];
+                        newGrades[idx].avgMnInput = e.target.value;
+                        setKpiData({ ...kpiData, grades: newGrades });
+                      }}
+                      className="form-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">Basicity</label>
+                    <input
+                      type="text"
+                      value={grade.basicity || ""}
+                      onChange={(e) => {
+                        const newGrades = [...kpiData.grades];
+                        newGrades[idx].basicity = e.target.value;
+                        setKpiData({ ...kpiData, grades: newGrades });
+                      }}
+                      className="form-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="form-label">MnO</label>
+                    <input
+                      type="text"
+                      value={grade.mnO || ""}
+                      onChange={(e) => {
+                        const newGrades = [...kpiData.grades];
+                        newGrades[idx].mnO = e.target.value;
+                        setKpiData({ ...kpiData, grades: newGrades });
+                      }}
+                      className="form-input"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         

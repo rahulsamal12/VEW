@@ -61,8 +61,12 @@ export default async function ClientsPage() {
                   {/* Subtle brass marker on hover */}
                   <div className="absolute top-0 left-0 w-full h-[2px] bg-[#B68A2C] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"></div>
 
-                  <div className="w-[46px] h-[46px] flex-shrink-0 bg-[#FDFCF6] dark:bg-[#1C2023] border border-[var(--border-color)] flex items-center justify-center rounded-[2px] text-[#B68A2C] text-[18px] font-bold font-sans">
-                    {initial}
+                  <div className="w-[46px] h-[46px] flex-shrink-0 bg-[#FDFCF6] dark:bg-[#1C2023] border border-[var(--border-color)] flex items-center justify-center rounded-[2px] text-[#B68A2C] text-[18px] font-bold font-sans overflow-hidden">
+                    {c.logo ? (
+                      <img src={c.logo} alt={c.name} className="w-[85%] h-[85%] object-contain" />
+                    ) : (
+                      initial
+                    )}
                   </div>
                   <div className="flex flex-col min-w-0">
                     <h3 className="text-[18px] font-[600] text-[var(--text-primary)] leading-[1.3] truncate whitespace-normal break-words">
@@ -85,8 +89,12 @@ export default async function ClientsPage() {
                <div className="group flex items-start sm:items-center gap-5 p-6 sm:p-8 bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-[3px] hover:border-[#B68A2C] hover:-translate-y-[2px] transition-all duration-250 ease-out relative overflow-hidden">
                   <div className="absolute top-0 left-0 h-full w-[3px] bg-[#B68A2C] scale-y-0 group-hover:scale-y-100 origin-top transition-transform duration-300"></div>
                   
-                  <div className="w-[46px] h-[46px] sm:w-[54px] sm:h-[54px] flex-shrink-0 bg-[#FDFCF6] dark:bg-[#1C2023] border border-[var(--border-color)] flex items-center justify-center rounded-[2px] text-[#B68A2C] text-[20px] font-bold font-sans">
-                    {finalClient.name ? finalClient.name.charAt(0).toUpperCase() : "I"}
+                  <div className="w-[46px] h-[46px] sm:w-[54px] sm:h-[54px] flex-shrink-0 bg-[#FDFCF6] dark:bg-[#1C2023] border border-[var(--border-color)] flex items-center justify-center rounded-[2px] text-[#B68A2C] text-[20px] font-bold font-sans overflow-hidden">
+                    {finalClient.logo ? (
+                      <img src={finalClient.logo} alt={finalClient.name} className="w-[85%] h-[85%] object-contain" />
+                    ) : (
+                      finalClient.name ? finalClient.name.charAt(0).toUpperCase() : "I"
+                    )}
                   </div>
                   <div className="flex flex-col min-w-0">
                     <h3 className="text-[20px] font-[600] text-[var(--text-primary)] leading-[1.3]">

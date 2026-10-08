@@ -39,11 +39,16 @@ export async function getAboutData() {
 }
 
 export async function getHomepageData() {
-  return fetchFromApi('/homepage', {
+  return fetchFromApi<any>('/homepage', {
     heroHeading: "",
     heroSubheading: "Furnace O&M, Metal Recovery Plants, Sinter Plants & Turnkey Projects",
     companyIntro: "",
-    keyStatistics: []
+    keyStatistics: [],
+    sectors: [],
+    ctaHeading: "",
+    ctaDescription: "",
+    ctaText: "",
+    ctaLink: ""
   });
 }
 
@@ -56,7 +61,15 @@ export async function getServiceBySlug(slug: string) {
 }
 
 export async function getClientsData() {
-  return fetchFromApi('/clients', []);
+  const data = await fetchFromApi('/clients', []);
+  if (data && Array.isArray(data)) {
+    const backendBase = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
+    return data.map((item: any) => ({
+      ...item,
+      logo: item.logo?.startsWith('/uploads/') ? `${backendBase}${item.logo}` : item.logo
+    }));
+  }
+  return data;
 }
 
 export async function getFurnaceProjectsData() {
@@ -204,5 +217,26 @@ export async function getSiteImages() {
   }
   
   return mergedImages;
+}
+
+export async function getEngineeringInActionData() {
+  const data = await fetchFromApi('/engineering-in-action', {
+    items: [],
+    settings: {
+      heading: 'Engineering in Action',
+      description: 'Advanced furnace and metallurgical operations engineered for reliable industrial performance.',
+      enabled: true
+    }
+  });
+
+  if (data && data.items && Array.isArray(data.items)) {
+    const backendBase = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
+    data.items = data.items.map((item: any) => ({
+      ...item,
+      imageUrl: item.imageUrl?.startsWith('/uploads/') ? `${backendBase}${item.imageUrl}` : item.imageUrl
+    }));
+  }
+
+  return data;
 }
 

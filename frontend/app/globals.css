@@ -48,44 +48,44 @@
 
 html.dark {
   /* Dark Theme (Restrained Industrial) */
-  --bg-primary: #151A1E;
-  --bg-secondary: #1D252B;
-  --bg-surface: #1D252B;
-  --bg-elevated: #294452;
+  --bg-primary: #11181D;
+  --bg-secondary: #18242B;
+  --bg-surface: #20313A;
+  --bg-elevated: #20313A;
   
-  --text-primary: #F3F4F2;
-  --text-secondary: #C7D0D5;
-  --text-body: #C7D0D5;
-  --text-muted: #92999D;
-  --text-table-body: #C7D0D5;
+  --text-primary: #F4F5F3;
+  --text-secondary: #B9C3C7;
+  --text-body: #B9C3C7;
+  --text-muted: #8E9BA1;
+  --text-table-body: #B9C3C7;
   
-  --border-color: #36434B;
-  --border-subtle: #36434B;
+  --border-color: #34444C;
+  --border-subtle: #34444C;
   
-  --accent-steel: #294452;
-  --accent-steel-hover: #1D252B;
-  --accent-brass: #C19A45;
-  --accent-brass-hover: #D1AA58;
-  --accent-light: #D1AA58;
+  --accent-steel: #203746;
+  --accent-steel-hover: #182B38;
+  --accent-brass: #B68A2C;
+  --accent-brass-hover: #C69A3A;
+  --accent-light: #C69A3A;
   
   --color-success: #6E9B7D;
   --color-warning: #D09A4A;
   --color-error: #D06B6B;
   
-  --header-nav-bg: #111A20;
-  --header-top-bg: #203746;
-  --header-top-text: #D1D9DD;
-  --header-text: #F3F4F2;
-  --header-text-secondary: #D1D9DD;
-  --header-border: rgba(255,255,255,0.12);
-  --logo-bg: #1D252B;
-  --logo-border: #36434B;
+  --header-nav-bg: #0D151A;
+  --header-top-bg: #11181D;
+  --header-top-text: #B9C3C7;
+  --header-text: #F4F5F3;
+  --header-text-secondary: #B9C3C7;
+  --header-border: #34444C;
+  --logo-bg: #18242B;
+  --logo-border: #34444C;
   --theme-toggle-bg: transparent;
-  --theme-toggle-icon: #F3F4F2;
+  --theme-toggle-icon: #F4F5F3;
   --theme-toggle-hover: transparent;
-  --header-bg: rgba(17, 19, 21, 0.95);
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --table-stripe: #141719;
+  --header-bg: #0D151A;
+  --card-shadow: none;
+  --table-stripe: #18242B;
 }
 
 body {
@@ -163,6 +163,21 @@ body {
     color: #FFFFFF;
   }
 
+  html.dark .industrial-button-primary:hover {
+    background-color: var(--accent-brass-hover);
+    border-color: var(--accent-brass-hover);
+  }
+
+  html.dark .industrial-button-secondary {
+    border-color: var(--accent-brass);
+    color: var(--text-primary);
+  }
+
+  html.dark .industrial-button-secondary:hover {
+    background-color: var(--bg-surface);
+    border-color: var(--accent-brass);
+  }
+
   .industrial-button-accent {
     @apply inline-flex items-center justify-center font-semibold text-[14px] leading-none tracking-[0.01em] px-6 py-3 rounded-[8px] border duration-200 transition-colors;
     background-color: var(--accent-brass);
@@ -217,6 +232,10 @@ body {
 
 .industrial-table tbody tr:hover {
   background-color: var(--bg-secondary);
+}
+
+html.dark .industrial-table tbody tr:hover {
+  background-color: var(--bg-surface);
 }
 
 /* Custom Scrollbar */
@@ -351,5 +370,28 @@ body {
   }
   footer a {
     font-weight: 500 !important;
+  }
+}
+
+/* Global spacing fix for the first content section below the sticky navbar 
+   This safely handles all standard page containers (.max-w-7xl and .max-w-[1280px])
+   without breaking custom homepage hero layouts that don't use these classes as their top level element.
+*/
+main.flex-grow > .max-w-7xl,
+main.flex-grow > .max-w-\[1280px\] {
+  padding-top: 36px !important;
+}
+
+@media (min-width: 768px) {
+  main.flex-grow > .max-w-7xl,
+  main.flex-grow > .max-w-\[1280px\] {
+    padding-top: 48px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  main.flex-grow > .max-w-7xl,
+  main.flex-grow > .max-w-\[1280px\] {
+    padding-top: 64px !important;
   }
 }

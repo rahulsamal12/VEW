@@ -1,104 +1,108 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { fetchAdminData, updateAdminData } from "@/lib/adminApi";
-import { Globe, Plus, Trash2, Edit2 , AlertCircle, RefreshCw} from "lucide-react";
-interface InternationalItem {
+import { Plus, Trash2, Edit2, AlertCircle, RefreshCw } from "lucide-react";
+
+interface JourneyItem {
   _id?: string;
-  client: string;
-  location: string;
-  scope: string;
   year: string;
+  title: string;
+  description: string;
+  order: number;
 }
-export default function InternationalProjectsAdminPage() {
-  const [items, setItems] = useState<InternationalItem[]>([]);
-  const [editingItem, setEditingItem] = useState<InternationalItem | null>(
-    null,
-  );
+
+export default function JourneyAdminPage() {
+  const [items, setItems] = useState<JourneyItem[]>([]);
+  const [editingItem, setEditingItem] = useState<JourneyItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<InternationalItem | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<JourneyItem | null>(null);
   const [pageMsg, setPageMsg] = useState("");
 
-  const [formData, setFormData] = useState<InternationalItem>({
-    client: "",
-    location: "",
-    scope: "",
+  const [formData, setFormData] = useState<JourneyItem>({
     year: "",
+    title: "",
+    description: "",
+    order: 0,
   });
+
   const loadData = async () => {
-    const res = await fetchAdminData("/projects/international");
+    const res = await fetchAdminData("/journey");
     if (res && res.data) setItems(res.data);
   };
+
   useEffect(() => {
     loadData();
   }, []);
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     let res;
     if (editingItem && editingItem._id) {
       res = await updateAdminData(
-        `/admin/projects/international/${editingItem._id}`,
+        `/admin/journey/${editingItem._id}`,
         formData,
         "PUT"
       );
     } else {
-      res = await updateAdminData("/admin/projects/international", formData, "POST");
+      res = await updateAdminData("/admin/journey", formData, "POST");
     }
 
     if (res && res.success) {
       setIsModalOpen(false);
       setEditingItem(null);
-      // Optimistic update
-      if (editingItem && editingItem._id) {
-         setItems(prev => prev.map(item => item._id === editingItem._id ? res.data : item));
-      } else {
-         setItems(prev => [res.data, ...prev]);
-      }
       await loadData();
     } else {
-      alert(res?.message || "Failed to save project");
+      alert(res?.message || "Failed to save milestone");
     }
   };
-  const confirmDelete = (item: InternationalItem) => {
+
+  const confirmDelete = (item: JourneyItem) => {
     setItemToDelete(item);
     setIsDeleteModalOpen(true);
   };
 
   const handleDelete = async () => {
     if (!itemToDelete || !itemToDelete._id) return;
-    const res = await updateAdminData(`/admin/projects/international/${itemToDelete._id}`, null, "DELETE");
+    const res = await updateAdminData(`/admin/journey/${itemToDelete._id}`, null, "DELETE");
     if (res && res.success) {
-      setPageMsg("Project deleted successfully!");
+      setPageMsg("Milestone deleted successfully!");
       setTimeout(() => setPageMsg(""), 3000);
       setIsDeleteModalOpen(false);
-      setItems(prev => prev.filter(item => item._id !== itemToDelete._id));
       setItemToDelete(null);
       await loadData();
     } else {
-      setPageMsg(res?.message || "Failed to delete project.");
+      setPageMsg(res?.message || "Failed to delete milestone.");
       setTimeout(() => setPageMsg(""), 3000);
     }
   };
+
   const openNew = () => {
-    setFormData({ client: "", location: "", scope: "", year: "" });
+    setFormData({
+      year: "",
+      title: "",
+      description: "",
+      order: items.length > 0 ? Math.max(...items.map(i => i.order || 0)) + 1 : 0,
+    });
     setEditingItem(null);
     setIsModalOpen(true);
   };
-  const openEdit = (item: InternationalItem) => {
+
+  const openEdit = (item: JourneyItem) => {
     setFormData(item);
     setEditingItem(item);
     setIsModalOpen(true);
   };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-admin-border pb-4">
         <div>
           <h1 className="text-[24px] font-bold text-admin-text-primary tracking-tight">
-            International Projects Manager
+            Company Journey
           </h1>
           <p className="text-[13px] text-admin-text-secondary mt-1">
-            Manage global projects portfolio (Oman, Zambia, etc.).
+            Manage the milestones on the Company Journey timeline.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -107,11 +111,8 @@ export default function InternationalProjectsAdminPage() {
               {pageMsg}
             </div>
           )}
-          <button
-            onClick={openNew}
-            className="btn-primary gap-1.5 shrink-0"
-          >
-            <Plus className="w-4 h-4" /> Add International Project
+          <button onClick={openNew} className="btn-primary gap-1.5 shrink-0">
+            <Plus className="w-4 h-4" /> Add New Milestone
           </button>
         </div>
       </div>
@@ -120,25 +121,25 @@ export default function InternationalProjectsAdminPage() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Client</th>
-              <th>Location</th>
-              <th>Scope</th>
               <th>Year</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Order</th>
               <th className="text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {items.map((row, idx) => (
               <tr key={row._id || idx}>
-                <td className="font-bold">{row.client}</td>
-                <td className="text-admin-steel dark:text-admin-brass font-semibold">{row.location}</td>
-                <td className="font-medium">{row.scope}</td>
-                <td className="font-bold text-admin-text-muted">{row.year}</td>
+                <td className="font-bold text-admin-steel dark:text-admin-brass">{row.year}</td>
+                <td className="font-semibold">{row.title}</td>
+                <td className="text-admin-text-muted truncate max-w-xs">{row.description}</td>
+                <td>{row.order}</td>
                 <td className="text-right space-x-2">
                   <button
                     onClick={() => openEdit(row)}
                     className="p-1.5 text-admin-text-muted hover:text-admin-steel dark:hover:text-admin-brass transition-colors"
-                    title="Edit Project"
+                    title="Edit Milestone"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
@@ -146,7 +147,7 @@ export default function InternationalProjectsAdminPage() {
                     <button
                       onClick={() => confirmDelete(row)}
                       className="p-1.5 text-admin-text-muted hover:text-rose-600 transition-colors"
-                      title="Delete Project"
+                      title="Delete Milestone"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -157,7 +158,7 @@ export default function InternationalProjectsAdminPage() {
             {items.length === 0 && (
               <tr>
                 <td colSpan={5} className="text-center py-8 text-admin-text-muted">
-                  No projects found. Add a new project to get started.
+                  No milestones found. Add a new milestone to get started.
                 </td>
               </tr>
             )}
@@ -172,66 +173,54 @@ export default function InternationalProjectsAdminPage() {
             className="bg-admin-surface border border-admin-border p-6 sm:p-8 rounded-sm max-w-lg w-full space-y-6 shadow-xl"
           >
             <h2 className="text-[18px] font-bold text-admin-text-primary border-b border-admin-border pb-3">
-              {editingItem
-                ? "Edit International Project"
-                : "Add International Project"}
+              {editingItem ? "Edit Milestone" : "Add New Milestone"}
             </h2>
             
             <div className="space-y-4">
-              <div>
-                <label className="form-label">Client Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.client}
-                  onChange={(e) =>
-                    setFormData({ ...formData, client: e.target.value })
-                  }
-                  className="form-input"
-                />
-              </div>
-              
-              <div>
-                <label className="form-label">Location *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.location}
-                  onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
-                  }
-                  placeholder="e.g. Sohar, Oman or Zambia"
-                  className="form-input"
-                />
-              </div>
-              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="form-label">Scope *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.scope}
-                    onChange={(e) =>
-                      setFormData({ ...formData, scope: e.target.value })
-                    }
-                    placeholder="e.g. 150 TPD MRP"
-                    className="form-input"
-                  />
-                </div>
-                <div>
-                  <label className="form-label">Year *</label>
+                  <label className="form-label">Year/Date *</label>
                   <input
                     type="text"
                     required
                     value={formData.year}
-                    onChange={(e) =>
-                      setFormData({ ...formData, year: e.target.value })
-                    }
-                    placeholder="e.g. 2023"
+                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                    className="form-input"
+                    placeholder="e.g. 2003"
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Order</label>
+                  <input
+                    type="number"
+                    value={formData.order}
+                    onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
                     className="form-input"
                   />
                 </div>
+              </div>
+              
+              <div>
+                <label className="form-label">Title *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="form-input"
+                  placeholder="Milestone title"
+                />
+              </div>
+              
+              <div>
+                <label className="form-label">Description *</label>
+                <textarea
+                  required
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="form-input min-h-[100px] whitespace-pre-wrap"
+                  placeholder="Detailed description..."
+                />
               </div>
             </div>
             
@@ -247,14 +236,13 @@ export default function InternationalProjectsAdminPage() {
                 type="submit"
                 className="btn-primary flex-1"
               >
-                Save Project
+                Save Milestone
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && itemToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-admin-surface border border-admin-border rounded-sm shadow-xl w-full max-w-sm p-6 text-center space-y-4">
@@ -262,9 +250,9 @@ export default function InternationalProjectsAdminPage() {
               <Trash2 className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-[18px] font-bold text-admin-text-primary">Delete Project?</h2>
+              <h2 className="text-[18px] font-bold text-admin-text-primary">Delete Milestone?</h2>
               <p className="text-[13px] text-admin-text-secondary mt-2">
-                Are you sure you want to delete <strong className="text-admin-text-primary">{itemToDelete.client}</strong>? This action cannot be undone.
+                Are you sure you want to delete <strong className="text-admin-text-primary">{itemToDelete.year} - {itemToDelete.title}</strong>? This action cannot be undone.
               </p>
             </div>
             <div className="flex gap-3 justify-center pt-2">
@@ -281,5 +269,3 @@ export default function InternationalProjectsAdminPage() {
     </div>
   );
 }
-
-

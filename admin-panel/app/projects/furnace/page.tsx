@@ -15,6 +15,11 @@ export default function FurnaceProjectsAdminPage() {
   const [items, setItems] = useState<FurnaceItem[]>([]);
   const [editingItem, setEditingItem] = useState<FurnaceItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<FurnaceItem | null>(null);
+  const [pageMsg, setPageMsg] = useState("");
+
   const [formData, setFormData] = useState<FurnaceItem>({
     client: "",
     furCapacity: "",
@@ -57,15 +62,24 @@ export default function FurnaceProjectsAdminPage() {
       alert(res?.message || "Failed to save project");
     }
   };
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this Furnace Project?")) {
-      const res = await updateAdminData(`/admin/projects/furnace/${id}`, {}, "DELETE");
-      if (res && res.success) {
-        setItems(prev => prev.filter(item => item._id !== id));
-        await loadData();
-      } else {
-        alert(res?.message || "Failed to delete");
-      }
+  const confirmDelete = (item: FurnaceItem) => {
+    setItemToDelete(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!itemToDelete || !itemToDelete._id) return;
+    const res = await updateAdminData(`/admin/projects/furnace/${itemToDelete._id}`, null, "DELETE");
+    if (res && res.success) {
+      setPageMsg("Project deleted successfully!");
+      setTimeout(() => setPageMsg(""), 3000);
+      setIsDeleteModalOpen(false);
+      setItems(prev => prev.filter(item => item._id !== itemToDelete._id));
+      setItemToDelete(null);
+      await loadData();
+    } else {
+      setPageMsg(res?.message || "Failed to delete project.");
+      setTimeout(() => setPageMsg(""), 3000);
     }
   };
   const openNew = () => {
@@ -96,12 +110,19 @@ export default function FurnaceProjectsAdminPage() {
             Manage submerged arc furnace projects list.
           </p>
         </div>
-        <button
-          onClick={openNew}
-          className="btn-primary gap-1.5"
-        >
-          <Plus className="w-4 h-4" /> Add New Furnace Project
-        </button>
+        <div className="flex items-center gap-3">
+          {pageMsg && (
+            <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 text-[12px] font-bold uppercase tracking-wider rounded-sm shadow-sm hidden md:block">
+              {pageMsg}
+            </div>
+          )}
+          <button
+            onClick={openNew}
+            className="btn-primary gap-1.5 shrink-0"
+          >
+            <Plus className="w-4 h-4" /> Add New Furnace Project
+          </button>
+        </div>
       </div>
       
       <div className="admin-table-container rounded-sm">
@@ -136,7 +157,7 @@ export default function FurnaceProjectsAdminPage() {
                   </button>
                   {row._id && (
                     <button
-                      onClick={() => handleDelete(row._id!)}
+                      onClick={() => confirmDelete(row)}
                       className="p-1.5 text-admin-text-muted hover:text-rose-600 transition-colors"
                       title="Delete Project"
                     >
@@ -267,6 +288,31 @@ export default function FurnaceProjectsAdminPage() {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && itemToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-admin-surface border border-admin-border rounded-sm shadow-xl w-full max-w-sm p-6 text-center space-y-4">
+            <div className="w-12 h-12 bg-rose-500/10 rounded-full flex items-center justify-center mx-auto text-rose-500">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-[18px] font-bold text-admin-text-primary">Delete Project?</h2>
+              <p className="text-[13px] text-admin-text-secondary mt-2">
+                Are you sure you want to delete <strong className="text-admin-text-primary">{itemToDelete.client}</strong>? This action cannot be undone.
+              </p>
+            </div>
+            <div className="flex gap-3 justify-center pt-2">
+              <button onClick={() => setIsDeleteModalOpen(false)} className="btn-secondary flex-1">
+                Cancel
+              </button>
+              <button onClick={handleDelete} className="btn-primary bg-rose-600 hover:bg-rose-700 border-rose-600 text-white flex-1">
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

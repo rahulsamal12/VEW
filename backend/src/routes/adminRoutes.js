@@ -10,6 +10,14 @@ const upload = require('../middleware/uploadMiddleware');
 // Protect all admin routes
 router.use(protectAdmin);
 
+const activityMiddleware = require('../middleware/activityMiddleware');
+const dashboardController = require('../controllers/dashboardController');
+
+router.use(activityMiddleware);
+
+// Dashboard
+router.get('/dashboard/stats', dashboardController.getDashboardStats);
+
 // Image Management
 router.post('/images/:section', upload.single('image'), imageController.uploadImage);
 
@@ -54,6 +62,11 @@ router.delete('/services/:id', contentController.deleteService);
 router.post('/clients', contentController.createClient);
 router.put('/clients/:id', contentController.updateClient);
 router.delete('/clients/:id', contentController.deleteClient);
+
+// History Timeline CRUD
+router.post('/journey', contentController.createHistoryTimeline);
+router.put('/journey/:id', contentController.updateHistoryTimeline);
+router.delete('/journey/:id', contentController.deleteHistoryTimeline);
 
 // Enquiries Management
 router.get('/enquiries', getEnquiries);

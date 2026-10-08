@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAdmin } from "@/lib/adminApi";
-import { Lock, User, AlertCircle, ShieldCheck } from "lucide-react";
+import { Lock, User, AlertCircle, ShieldCheck, Eye, EyeOff } from "lucide-react";
 export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -69,13 +70,21 @@ export default function LoginPage() {
             <div className="relative">
               <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-admin-text-muted" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="form-input pl-9"
+                className="form-input pl-9 pr-10"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-admin-text-muted hover:text-admin-text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-admin-brass rounded-sm"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
           <div className="pt-2">

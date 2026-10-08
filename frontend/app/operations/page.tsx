@@ -94,151 +94,44 @@ export default async function OperationsSopHubPage() {
       {/* 6 Sequential Operations Cards */}{" "}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {" "}
-        <Link
-          href="/operations/raw-materials"
-          className="py-8 border-t border-[var(--border-subtle)] space-y-4"
-        >
-          {" "}
-          <div className="flex justify-between items-center">
-            {" "}
-            <span className="text-[12px] font-bold text-[var(--accent-brass)] bg-[var(--bg-secondary)] px-2 py-0.5 border border-[var(--border-color)]">
-              STEP 01
-            </span>{" "}
-            <ArrowDownRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-brass)]" />{" "}
-          </div>{" "}
-          <h3 className="text-[22px] font-bold text-[var(--text-primary)]">
-            Raw Material Receiving & Storage Shed
-          </h3>{" "}
-          <p className="text-[14px] md:text-[15px] text-[var(--text-secondary)] font-medium leading-[1.6]">
-            Weighbridge, sampling, storage shed requirement (30m/60m, 12m
-            height, semi-closed shed).
-          </p>{" "}
-          <div className="pt-2 text-xs text-[var(--accent-steel)] dark:text-[var(--accent-brass)] font-semibold flex items-center gap-1">
-            {" "}
-            Material Matrix & Shed SOP{" "}
-            <ArrowRight className="w-3.5 h-3.5" />{" "}
-          </div>{" "}
-        </Link>{" "}
-        <Link
-          href="/operations/material-prep"
-          className="py-8 border-t border-[var(--border-subtle)] space-y-4"
-        >
-          {" "}
-          <div className="flex justify-between items-center">
-            {" "}
-            <span className="text-[12px] font-bold text-[var(--accent-brass)] bg-[var(--bg-secondary)] px-2 py-0.5 border border-[var(--border-color)]">
-              STEP 02
-            </span>{" "}
-            <ArrowDownRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-brass)]" />{" "}
-          </div>{" "}
-          <h3 className="text-[22px] font-bold text-[var(--text-primary)]">
-            Raw Material Preparation
-          </h3>{" "}
-          <p className="text-[14px] md:text-[15px] text-[var(--text-secondary)] font-medium leading-[1.6]">
-            Screening under-sized material, weigh feeders batching, conveyor
-            charging.
-          </p>{" "}
-          <div className="pt-2 text-xs text-[var(--accent-steel)] dark:text-[var(--accent-brass)] font-semibold flex items-center gap-1">
-            {" "}
-            Preparation SOP <ArrowRight className="w-3.5 h-3.5" />{" "}
-          </div>{" "}
-        </Link>{" "}
-        <Link
-          href="/operations/saf-furnace"
-          className="py-8 border-t border-[var(--border-subtle)] space-y-4"
-        >
-          {" "}
-          <div className="flex justify-between items-center">
-            {" "}
-            <span className="text-[12px] font-bold text-[var(--accent-brass)] bg-[var(--bg-secondary)] px-2 py-0.5 border border-[var(--border-color)]">
-              STEP 03
-            </span>{" "}
-            <ArrowDownRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-brass)]" />{" "}
-          </div>{" "}
-          <h3 className="text-[22px] font-bold text-[var(--text-primary)]">
-            Smelting — SAF Operation
-          </h3>{" "}
-          <p className="text-[14px] md:text-[15px] text-[var(--text-secondary)] font-medium leading-[1.6]">
-            22.5 MVA furnace, 1400-1600°C, tapping every 2-2.30 hrs, electrode
-            slipping management.
-          </p>{" "}
-          <div className="pt-2 text-xs text-[var(--accent-steel)] dark:text-[var(--accent-brass)] font-semibold flex items-center gap-1">
-            {" "}
-            SAF Operation SOP <ArrowRight className="w-3.5 h-3.5" />{" "}
-          </div>{" "}
-        </Link>{" "}
-        <Link
-          href="/operations/casting-cooling"
-          className="py-8 border-t border-[var(--border-subtle)] space-y-4"
-        >
-          {" "}
-          <div className="flex justify-between items-center">
-            {" "}
-            <span className="text-[12px] font-bold text-[var(--accent-brass)] bg-[var(--bg-secondary)] px-2 py-0.5 border border-[var(--border-color)]">
-              STEP 04
-            </span>{" "}
-            <ArrowDownRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-brass)]" />{" "}
-          </div>{" "}
-          <h3 className="text-[22px] font-bold text-[var(--text-primary)]">
-            Casting & Slag Granulation
-          </h3>{" "}
-          <p className="text-[14px] md:text-[15px] text-[var(--text-secondary)] font-medium leading-[1.6]">
-            Ladle pouring, moulds, air/water cooling, slag granulation
-            recommendation.
-          </p>{" "}
-          <div className="pt-2 text-xs text-[var(--accent-steel)] dark:text-[var(--accent-brass)] font-semibold flex items-center gap-1">
-            {" "}
-            Casting SOP <ArrowRight className="w-3.5 h-3.5" />{" "}
-          </div>{" "}
-        </Link>{" "}
-        <Link
-          href="/operations/breaking-sorting"
-          className="py-8 border-t border-[var(--border-subtle)] space-y-4"
-        >
-          {" "}
-          <div className="flex justify-between items-center">
-            {" "}
-            <span className="text-[12px] font-bold text-[var(--accent-brass)] bg-[var(--bg-secondary)] px-2 py-0.5 border border-[var(--border-color)]">
-              STEP 05
-            </span>{" "}
-            <ArrowDownRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-brass)]" />{" "}
-          </div>{" "}
-          <h3 className="text-[22px] font-bold text-[var(--text-primary)]">
-            Metal Breaking, Sizing & Sorting
-          </h3>{" "}
-          <p className="text-[14px] md:text-[15px] text-[var(--text-secondary)] font-medium leading-[1.6]">
-            Rock breaker, manual breaking, jaw/cone crushing 10-150mm, MRP metal
-            recovery from contaminated slag.
-          </p>{" "}
-          <div className="pt-2 text-xs text-[var(--accent-steel)] dark:text-[var(--accent-brass)] font-semibold flex items-center gap-1">
-            {" "}
-            Breaking & Recovery SOP <ArrowRight className="w-3.5 h-3.5" />{" "}
-          </div>{" "}
-        </Link>{" "}
-        <Link
-          href="/operations/packing-dispatch"
-          className="py-8 border-t border-[var(--border-subtle)] space-y-4"
-        >
-          {" "}
-          <div className="flex justify-between items-center">
-            {" "}
-            <span className="text-[12px] font-bold text-[var(--accent-brass)] bg-[var(--bg-secondary)] px-2 py-0.5 border border-[var(--border-color)]">
-              STEP 06
-            </span>{" "}
-            <ArrowDownRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-brass)]" />{" "}
-          </div>{" "}
-          <h3 className="text-[22px] font-bold text-[var(--text-primary)]">
-            Packing & Dispatch
-          </h3>{" "}
-          <p className="text-[14px] md:text-[15px] text-[var(--text-secondary)] font-medium leading-[1.6]">
-            Auto bagging 1 MT jumbo/50kg bags, tare/gross weight, QC cert lot
-            wise, weighbridge dispatch.
-          </p>{" "}
-          <div className="pt-2 text-xs text-[var(--accent-steel)] dark:text-[var(--accent-brass)] font-semibold flex items-center gap-1">
-            {" "}
-            Packing & Dispatch SOP <ArrowRight className="w-3.5 h-3.5" />{" "}
-          </div>{" "}
-        </Link>{" "}
+        {OPERATIONAL_SOP_DATA.steps && OPERATIONAL_SOP_DATA.steps.slice(0, 6).map((step: any, idx: number) => {
+          const stepConfigs = [
+            { href: "/operations/raw-materials", bottomText: "Material Matrix & Shed SOP" },
+            { href: "/operations/material-prep", bottomText: "Preparation SOP" },
+            { href: "/operations/saf-furnace", bottomText: "SAF Operation SOP" },
+            { href: "/operations/casting-cooling", bottomText: "Casting SOP" },
+            { href: "/operations/breaking-sorting", bottomText: "Breaking & Recovery SOP" },
+            { href: "/operations/packing-dispatch", bottomText: "Packing & Dispatch SOP" }
+          ];
+          const config = stepConfigs[idx] || stepConfigs[0];
+          
+          return (
+            <Link
+              key={idx}
+              href={config.href}
+              className="py-8 border-t border-[var(--border-subtle)] space-y-4"
+            >
+              {" "}
+              <div className="flex justify-between items-center">
+                {" "}
+                <span className="text-[12px] font-bold text-[var(--accent-brass)] bg-[var(--bg-secondary)] px-2 py-0.5 border border-[var(--border-color)]">
+                  STEP 0{idx + 1}
+                </span>{" "}
+                <ArrowDownRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-brass)]" />{" "}
+              </div>{" "}
+              <h3 className="text-[22px] font-bold text-[var(--text-primary)]">
+                {step.name}
+              </h3>{" "}
+              <p className="text-[14px] md:text-[15px] text-[var(--text-secondary)] font-medium leading-[1.6]">
+                {step.overview}
+              </p>{" "}
+              <div className="pt-2 text-xs text-[var(--accent-steel)] dark:text-[var(--accent-brass)] font-semibold flex items-center gap-1">
+                {" "}
+                {config.bottomText} <ArrowRight className="w-3.5 h-3.5" />{" "}
+              </div>{" "}
+            </Link>
+          );
+        })}
       </div>{" "}
     </div>
   );

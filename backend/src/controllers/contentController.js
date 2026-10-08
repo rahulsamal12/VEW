@@ -101,7 +101,7 @@ const createListDoc = (Model) => async (req, res) => {
   try {
     const doc = new Model(req.body);
     await doc.save();
-    return res.json({ success: true, message: 'Item created successfully', data: doc });
+    return res.status(201).json({ success: true, message: 'Item created successfully', data: doc });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
@@ -121,10 +121,16 @@ const updateListDoc = (Model) => async (req, res) => {
 const deleteListDoc = (Model) => async (req, res) => {
   if (!global.isMongoConnected) return res.status(503).json({ success: false, message: 'Database service unavailable' });
   try {
+    console.log('DELETE REQUEST:', req.method, req.originalUrl, req.params);
     const doc = await Model.findByIdAndDelete(req.params.id);
-    if (!doc) return res.status(404).json({ success: false, message: 'Item not found' });
+    if (!doc) {
+      console.log('Doc not found for id:', req.params.id);
+      return res.status(404).json({ success: false, message: 'Item not found' });
+    }
+    console.log('Deleted doc successfully');
     return res.json({ success: true, message: 'Item deleted successfully' });
   } catch (error) {
+    console.error('DELETE ERROR:', error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -184,5 +190,9 @@ module.exports = {
 
   createClient: createListDoc(Client),
   updateClient: updateListDoc(Client),
-  deleteClient: deleteListDoc(Client)
+  deleteClient: deleteListDoc(Client),
+
+  createHistoryTimeline: createListDoc(HistoryTimeline),
+  updateHistoryTimeline: updateListDoc(HistoryTimeline),
+  deleteHistoryTimeline: deleteListDoc(HistoryTimeline)
 };

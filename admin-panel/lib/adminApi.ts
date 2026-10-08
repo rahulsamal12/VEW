@@ -32,6 +32,7 @@ export async function loginAdmin(credentials: { username: string; password: stri
       return { success: false, message: `Server error: ${res.status} ${res.statusText}` };
     }
     if (json.success && json.token) {
+      console.log('Login success, saving token:', json.token.substring(0, 15) + '...');
       setToken(json.token);
     }
     return json;
@@ -52,6 +53,11 @@ export async function fetchAdminData(endpoint: string) {
       cache: 'no-store'
     });
     const text = await res.text();
+    if (res.status === 401) {
+      removeToken();
+      if (typeof window !== 'undefined') window.location.href = '/login';
+      return { success: false, message: 'Session expired. Please log in again.' };
+    }
     try {
       return JSON.parse(text);
     } catch(e) {
@@ -71,6 +77,7 @@ export async function updateAdminData(endpoint: string, data: any, method: 'POST
         'Authorization': `Bearer ${token}`
       }
     };
+    console.log('Sending token in updateAdminData:', token ? token.substring(0, 15) + '...' : null);
     
     if (method !== 'DELETE') {
       options.headers = {
@@ -82,6 +89,11 @@ export async function updateAdminData(endpoint: string, data: any, method: 'POST
 
     const res = await fetch(`${API_BASE}${endpoint}`, options);
     const text = await res.text();
+    if (res.status === 401) {
+      removeToken();
+      if (typeof window !== 'undefined') window.location.href = '/login';
+      return { success: false, message: 'Session expired. Please log in again.' };
+    }
     try {
       return JSON.parse(text);
     } catch(e) {
@@ -108,6 +120,11 @@ export async function uploadAdminImage(section: string, file: File) {
     });
     
     const text = await res.text();
+    if (res.status === 401) {
+      removeToken();
+      if (typeof window !== 'undefined') window.location.href = '/login';
+      return { success: false, message: 'Session expired. Please log in again.' };
+    }
     try {
       return JSON.parse(text);
     } catch(e) {

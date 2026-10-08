@@ -1,7 +1,21 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { fetchAdminData, uploadAdminImage } from '@/lib/adminApi';
 import { Upload, Image as ImageIcon, CheckCircle2, AlertTriangle, RefreshCw } from 'lucide-react';
+
+const DEFAULT_SITE_IMAGES: Record<string, string> = {
+  hero: '/images/vew-hero-furnace.png',
+  about: '/images/vew-about-engineering.png',
+  furnaceOperations: '/images/vew-furnace-operations.png',
+  mrp: '/images/vew-mrp-material-recovery.png',
+  sinter: '/images/vew-sinter-plant.png',
+  rawMaterials: '/images/vew-raw-materials.png',
+  metalBreaking: '/images/vew-metal-breaking.png',
+  packingDispatch: '/images/vew-packing-dispatch.png',
+  innovation: '/images/vew-diaphragm-jig.png',
+  projects: '/images/vew-projects.png'
+};
 
 const SECTIONS = [
   { id: 'hero', label: 'Homepage Hero' },
@@ -94,6 +108,7 @@ export default function ImageManagementPage() {
   }
 
   const backendBase = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
+  const frontendBase = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
 
   return (
     <div className="space-y-6">
@@ -112,7 +127,13 @@ export default function ImageManagementPage() {
         {SECTIONS.map((section) => {
           const currentUrl = images[section.id];
           const isCurrentlyUploading = uploadingSection === section.id;
-          const displayUrl = currentUrl ? (currentUrl.startsWith('http') ? currentUrl : `${backendBase}${currentUrl}`) : null;
+          
+          let displayUrl = null;
+          if (currentUrl) {
+            displayUrl = currentUrl.startsWith('http') ? currentUrl : `${backendBase}${currentUrl}`;
+          } else if (DEFAULT_SITE_IMAGES[section.id]) {
+            displayUrl = `${frontendBase}${DEFAULT_SITE_IMAGES[section.id]}`;
+          }
 
           return (
             <div key={section.id} className="bg-admin-surface border border-admin-border p-5 rounded-md space-y-4">
@@ -132,7 +153,7 @@ export default function ImageManagementPage() {
                   <p className="text-xs font-semibold text-admin-text-secondary uppercase">Current Image</p>
                   <div className="w-full h-32 bg-admin-bg border border-admin-border rounded flex items-center justify-center overflow-hidden relative">
                     {displayUrl ? (
-                      <img src={displayUrl} alt={section.label} className="object-cover w-full h-full" />
+                      <Image src={displayUrl} alt={section.label} fill className="object-cover" unoptimized={true} />
                     ) : (
                       <span className="text-xs text-admin-text-muted">No custom image (using static default)</span>
                     )}
@@ -148,7 +169,7 @@ export default function ImageManagementPage() {
                   {isCurrentlyUploading && previewUrl ? (
                     <div className="space-y-2">
                       <div className="w-full h-32 bg-admin-bg border-2 border-admin-brass rounded flex items-center justify-center overflow-hidden relative">
-                        <img src={previewUrl} alt="Preview" className="object-cover w-full h-full" />
+                        <Image src={previewUrl} alt="Preview" fill className="object-cover" unoptimized={true} />
                       </div>
                       <div className="flex gap-2">
                         <button 
