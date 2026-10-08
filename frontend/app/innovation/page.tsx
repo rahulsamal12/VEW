@@ -230,7 +230,7 @@ export default async function InnovationPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-[1px] bg-[var(--border-color)] border border-[var(--border-color)] rounded-[8px] overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[1px] bg-[var(--border-color)] border border-[var(--border-color)] rounded-[8px] overflow-hidden">
           {INNOVATION_DATA.impacts.map((imp, idx) => (
             <div
               key={idx}
